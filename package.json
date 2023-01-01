@@ -27,6 +27,7 @@
   ],
   "type": "module",
   "devDependencies": {
+    "@octokit/request-error": "^3.0.2",
     "@tsconfig/node18": "^1.0.1",
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^18.11.18",

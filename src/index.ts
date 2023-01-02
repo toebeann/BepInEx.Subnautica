@@ -245,10 +245,7 @@ const git = simpleGit();
 const sha = await git.revparse(['HEAD']);
 console.log(sha);
 
-const addResult = await git.add('.');
-console.log(addResult);
-
-const commit = await git.commit('Updating metadata');
+const commit = await git.commit('Updating metadata', ['.metadata.json']);
 console.log(commit);
 
 // octokit.rest.repos.createRelease({

@@ -4,8 +4,7 @@
 
 This is a [BepInEx](https://github.com/BepInEx/BepInEx) pack for Subnautica, preconfigured and ready to use.
 
-BepInEx is a general purpose framework for Unity modding.
-BepInEx includes tools and libraries to
+BepInEx is a general purpose framework for Unity modding. BepInEx includes tools and libraries to
 
 -   load custom code (hereafter _plugins_) into the game on launch;
 -   patch in-game methods, classes and even entire assemblies without touching original game files;
@@ -69,5 +68,5 @@ At this moment you will not see any clear indication that BepInEx is working. It
 
 At this moment, you can use the following channels to ask for help
 
--   [Subnautica Modding Community](https://discord.gg/M27wjFAfTQ)
+-   [Subnautica Modding Community Discord](https://discord.gg/UpWuWwq)
 -   [BepInEx Discord](https://discord.gg/MpFEDAg) -- **Only technical support for THIS PACKAGE. No support for plugins.**

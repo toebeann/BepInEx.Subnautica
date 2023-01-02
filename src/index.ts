@@ -252,11 +252,10 @@ if (handled.every(result => !result.success)) {
 
 await writeMetadataToDisk(metadata); // update metadata
 
+console.log('Creating commit...');
 const git = simpleGit();
-
 await git.add('.metadata.json');
 const commit = await git.commit('Updating metadata', ['.metadata.json']);
-console.log(commit);
 
 if (env.GITHUB_PERSONAL_ACCESS_TOKEN) {
     try {

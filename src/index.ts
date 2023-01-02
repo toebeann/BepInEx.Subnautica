@@ -1,13 +1,24 @@
 import fs from 'fs-extra';
-import { exit } from 'node:process';
+import { env, exit } from 'node:process';
+import { join, relative, resolve } from 'node:path';
+import dotenv from 'dotenv';
+import { simpleGit } from 'simple-git';
 import { Octokit } from 'octokit';
 import { RequestError } from '@octokit/request-error';
-import { join, relative, resolve } from 'node:path';
 import JSZip from 'jszip';
-import { clean, coerce, parse, satisfies, valid, Range as SemVerRange } from 'semver';
+import {
+    clean,
+    coerce,
+    parse,
+    satisfies,
+    valid,
+    Range as SemVerRange,
+} from 'semver';
 
-const BEPINEX = 'BepInEx';
-const BEPINEX_REPO = { owner: BEPINEX, repo: BEPINEX };
+dotenv.config();
+
+const REPO = { owner: 'toebeann', repo: 'bepinex.subnautica' };
+const BEPINEX_REPO = { owner: 'BepInEx', repo: 'BepInEx' };
 const PAYLOAD_DIR = 'payload';
 const ASSETS_DIR = 'assets';
 const METADATA_FILE = '.metadata.json';
@@ -17,8 +28,8 @@ type Asset = Release['assets'][0];
 type BepInExReleaseType = 'x86' | 'x64' | 'unix';
 
 interface Metadata {
-    tag_name?: string,
-    version?: string
+    version?: string,
+    source?: string
 }
 
 const assetFilter = (asset: Asset, type: BepInExReleaseType) =>
@@ -28,9 +39,11 @@ const getAsset = (release: Release, type: BepInExReleaseType) => release.assets.
 
 const getVersion = (release: Release) => {
     const cleaned = clean(release.tag_name, true);
-    return (valid(cleaned, true)
-        ? parse(cleaned, true)
-        : coerce(cleaned, { loose: true }))?.version;
+    const validated = valid(cleaned, true);
+
+    return validated
+        ? validated
+        : coerce(cleaned, { loose: true })?.version;
 };
 
 const getMetadata = async (): Promise<Metadata> => {
@@ -45,8 +58,8 @@ const getMetadata = async (): Promise<Metadata> => {
 
 const createMetadata = (release: Release): Metadata => {
     return {
-        tag_name: release.tag_name,
-        version: getVersion(release)
+        version: getVersion(release),
+        source: release.html_url
     };
 };
 
@@ -66,6 +79,19 @@ const getFileNames = async (path: string) => {
     return files;
 }
 
+const handleReleaseError = (error: unknown, repo: { owner: string, repo: string }) => {
+    // an error occured while attempting to get the latest release
+    if (error instanceof RequestError) {
+        const message = error.status === 404
+            ? 'No releases were found'
+            : 'Could not retrieve releases';
+
+        console.error(`${message} for repo: /${repo.owner}/${repo.repo}`, `${error.status} ${error.message}`);
+    } else {
+        console.error(`Could not retrieve releases for repo: /${repo.owner}/${repo.repo}`, error);
+    }
+};
+
 const handleAssetError = (error: unknown, type: BepInExReleaseType) => {
     // an error occured while attempting to get the latest release
     if (error instanceof RequestError) {
@@ -73,11 +99,9 @@ const handleAssetError = (error: unknown, type: BepInExReleaseType) => {
             ? `${type} asset not found`
             : `Could not retrieve ${type} asset`;
 
-        console.error(`${message} for repo: /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`);
-        console.error(`${error.status} ${error.message}`);
+        console.error(`${message} for repo: /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`, `${error.status} ${error.message}`);
     } else {
-        console.error(`Could not retrieve ${type} asset for repo: /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`);
-        console.error(error);
+        console.error(`Could not retrieve ${type} asset for repo: /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`, error);
     }
 };
 
@@ -130,51 +154,103 @@ const writeZipToDisk = async (path: string, archive: JSZip, type: BepInExRelease
 }
 
 const handleAsset = async (release: Release, type: BepInExReleaseType) => {
-    const asset = getAsset(release, type);
+    let asset: ReturnType<typeof getAsset>;
 
-    if (asset) {
-        const buffer = await downloadAsset(asset, type);
-        if (buffer) {
-            const x64Archive = await embedPayload(buffer, type);
-            await fs.ensureDir(ASSETS_DIR);
-            await writeZipToDisk(join(ASSETS_DIR, asset.name), x64Archive, type);
+    try {
+        asset = getAsset(release, type);
+        if (asset) {
+            const buffer = await downloadAsset(asset, type);
+            if (buffer) {
+                const x64Archive = await embedPayload(buffer, type);
+                await fs.ensureDir(ASSETS_DIR);
+                await writeZipToDisk(join(ASSETS_DIR, asset.name), x64Archive, type);
+                return { asset, type, success: true };
+            } else {
+                return { asset, type, success: false };
+            }
+        } else {
+            return { asset, type, success: false };
         }
+    } catch {
+        return { asset, type, success: false };
     }
 }
 
-const octokit = new Octokit();
-let latestRelease: Release;
+const octokit = new Octokit({
+    auth: env.GITHUB_PERSONAL_ACCESS_TOKEN
+});
+
+console.log('Getting latest release...');
+let latestRelease: Release | undefined;
 try {
-    latestRelease = (await octokit.rest.repos.getLatestRelease(BEPINEX_REPO)).data;
+    latestRelease = (await octokit.rest.repos.getLatestRelease(REPO)).data;
 } catch (error) {
-    // an error occured while attempting to get the latest release
-    if (error instanceof RequestError) {
-        const message = error.status === 404
-            ? 'No releases were found'
-            : 'Could not retrieve releases';
-
-        console.error(`${message} for repo: /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`);
-        console.error(`${error.status} ${error.message}`);
-    } else {
-        console.error(`Could not retrieve releases for repo: /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`);
-        console.error(error);
-    }
-    exit(1);
+    handleReleaseError(error, REPO);
 }
 
-if (!latestRelease) {
+const latestReleaseVersion = latestRelease
+    ? getVersion(latestRelease)
+    : '0.0.0';
+
+let latestBepInExRelease: Release;
+try {
+    latestBepInExRelease = (await octokit.rest.repos.getLatestRelease(BEPINEX_REPO)).data;
+} catch (error) {
+    handleReleaseError(error, BEPINEX_REPO);
     exit(1);
 }
 
 const previousMetadata = await getMetadata();
-const metadata = createMetadata(latestRelease);
+const metadata = createMetadata(latestBepInExRelease);
 
-if (metadata.version && satisfies(metadata.version, new SemVerRange(`<= ${previousMetadata.version}`), { loose: true, includePrerelease: true })) {
-    // new release is the same or older than our latest, ignore it
-    console.log('No new releases since last check.');
+if (!env.npm_package_version) {
+    env.npm_package_version = (await fs.readJson('package.json')).version;
+    if (!env.npm_package_version) {
+        console.error('Could not get current package version!');
+        exit(1);
+    }
+}
+
+const version = `${metadata.version}-payload.${parse(env.npm_package_version, true)}`;
+const tag = `v${version}`;
+const previousVersion = `${previousMetadata.version}-payload.${latestReleaseVersion}`;
+
+if (metadata.version
+    && satisfies(metadata.version, new SemVerRange(`<= ${previousMetadata.version}`), { loose: true, includePrerelease: true }) // check bepinex release
+    && satisfies(version, new SemVerRange(`<= ${previousVersion}`, { loose: true, includePrerelease: true }))) { // check internal version
+    // both bepinex and this package have not released an update since last check, so we should cancel
+    console.log('No updates since last check.');
     exit(1);
 }
 
 // we have a new (or unknown) release, let's handle it
-await Promise.all([handleAsset(latestRelease, 'x64'), handleAsset(latestRelease, 'unix')]);
-await writeMetadataToDisk(metadata);
+const handled = await Promise.all([handleAsset(latestBepInExRelease, 'x64'), handleAsset(latestBepInExRelease, 'unix')]); // create assets
+
+// check for failures
+const failed = handled.filter(result => !result.success && result.asset);
+if (failed.length > 0) {
+    for (const failure of failed) {
+        console.error(`Failed to handle ${failure.type} asset`, failure.asset);
+    }
+    console.error('Encountered errors handling assets, quitting...');
+    exit(1);
+}
+
+// at this point all assets have been successfully downloaded and saved to disk with embedded payloads
+
+await writeMetadataToDisk(metadata); // update metadata
+
+const git = simpleGit();
+
+const sha = await git.revparse(['HEAD']);
+console.log(sha);
+
+const commit = await git.commit('Updating metadata');
+console.log(commit);
+
+// octokit.rest.repos.createRelease({
+
+// })
+
+// console.log(parent.data);
+

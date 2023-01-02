@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import { env, exit } from 'node:process';
-import { join, relative, resolve } from 'node:path';
+import { basename, join, relative, resolve } from 'node:path';
 import dotenv from 'dotenv';
 import { simpleGit } from 'simple-git';
 import { Octokit } from 'octokit';
@@ -32,10 +32,13 @@ interface Metadata {
     source?: string
 }
 
-const assetFilter = (asset: Asset, type: BepInExReleaseType) =>
-    asset.content_type === 'application/x-zip-compressed' && asset.name.toLowerCase().includes(type.toLowerCase());
+const assetFilter = (asset: Asset, type: BepInExReleaseType, unityMono: boolean) =>
+    asset.name.toLowerCase().includes(type.toLowerCase())
+    && (!unityMono || asset.name.toLowerCase().includes('unitymono'));
 
-const getAsset = (release: Release, type: BepInExReleaseType) => release.assets.find(asset => assetFilter(asset, type));
+const getAsset = (release: Release, type: BepInExReleaseType) =>
+    release.assets.find(asset => assetFilter(asset, type, true))
+    ?? release.assets.find(asset => assetFilter(asset, type, false));
 
 const getVersion = (release: Release) => {
     const cleaned = clean(release.tag_name, true);
@@ -67,15 +70,17 @@ const writeMetadataToDisk = (metadata: Metadata) => fs.writeJson(METADATA_FILE, 
 
 const getFileNames = async (path: string) => {
     const files: string[] = [];
-    const entries = await fs.readdir(resolve(path), { withFileTypes: true });
-    for (const entry of entries) {
-        const resolved = resolve(path, entry.name);
-        if (entry.isDirectory()) {
-            files.push(...await getFileNames(resolved));
-        } else {
-            files.push(resolved);
+    try {
+        const entries = await fs.readdir(resolve(path), { withFileTypes: true });
+        for (const entry of entries) {
+            const resolved = resolve(path, entry.name);
+            if (entry.isDirectory()) {
+                files.push(...await getFileNames(resolved));
+            } else {
+                files.push(resolved);
+            }
         }
-    }
+    } catch { }
     return files;
 }
 
@@ -212,7 +217,6 @@ if (!env.npm_package_version) {
 }
 
 const version = `${metadata.version}-payload.${parse(env.npm_package_version, true)}`;
-const tag = `v${version}`;
 const previousVersion = `${previousMetadata.version}-payload.${latestReleaseVersion}`;
 
 if (metadata.version
@@ -232,7 +236,12 @@ if (failed.length > 0) {
     for (const failure of failed) {
         console.error(`Failed to handle ${failure.type} asset`, failure.asset);
     }
-    console.error('Encountered errors handling assets, quitting...');
+    console.error(`Encountered errors handling assets from repo /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`);
+    exit(1);
+}
+
+if (handled.every(result => !result.success)) {
+    console.error(`No valid assets were found in repo /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`);
     exit(1);
 }
 
@@ -248,9 +257,27 @@ console.log(sha);
 const commit = await git.commit('Updating metadata', ['.metadata.json']);
 console.log(commit);
 
-// octokit.rest.repos.createRelease({
+try {
+    console.log('Creating release...');
+    const release = await octokit.rest.repos.createRelease({
+        ...REPO,
+        tag_name: `v${version}`,
+        target_commitish: commit.commit,
+        name: latestBepInExRelease.name ?? `BepInEx ${metadata.version}`,
+        body: latestBepInExRelease.body ?? undefined,
+        generate_release_notes: true
+    });
 
-// })
-
-// console.log(parent.data);
-
+    console.log('Uploading assets...');
+    const assets = await getFileNames('assets');
+    for await (const asset of assets) {
+        await octokit.rest.repos.uploadReleaseAsset({
+            ...REPO,
+            release_id: release.data.id,
+            name: basename(asset),
+            data: (await fs.readFile(asset)).toString()
+        });
+    }
+} catch (error) {
+    console.error(error);
+}

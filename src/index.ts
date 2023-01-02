@@ -146,6 +146,9 @@ const embedPayload = async (buffer: ArrayBuffer, type: BepInExReleaseType) => {
 
     // embed payload
     for (const path of await getFileNames(PAYLOAD_DIR)) {
+        if (basename(path).toLowerCase().endsWith('run_bepinex.sh') && type !== 'unix') {
+            continue;
+        }
         zip.file(relative(PAYLOAD_DIR, path), await fs.readFile(path));
     }
 
@@ -255,27 +258,29 @@ await git.add('.metadata.json');
 const commit = await git.commit('Updating metadata', ['.metadata.json']);
 console.log(commit);
 
-try {
-    console.log('Creating release...');
-    const release = await octokit.rest.repos.createRelease({
-        ...REPO,
-        tag_name: `v${version}`,
-        target_commitish: commit.commit,
-        name: latestBepInExRelease.name ?? `BepInEx ${metadata.version}`,
-        body: latestBepInExRelease.body ?? undefined,
-        generate_release_notes: true
-    });
-
-    console.log('Uploading assets...');
-    const assets = await getFileNames('assets');
-    for await (const asset of assets) {
-        await octokit.rest.repos.uploadReleaseAsset({
+if (env.GITHUB_PERSONAL_ACCESS_TOKEN) {
+    try {
+        console.log('Creating release...');
+        const release = await octokit.rest.repos.createRelease({
             ...REPO,
-            release_id: release.data.id,
-            name: basename(asset),
-            data: (await fs.readFile(asset)).toString()
+            tag_name: `v${version}`,
+            target_commitish: commit.commit,
+            name: latestBepInExRelease.name ?? `BepInEx ${metadata.version}`,
+            body: latestBepInExRelease.body ?? undefined,
+            generate_release_notes: true
         });
+
+        console.log('Uploading assets...');
+        const assets = await getFileNames('assets');
+        for await (const asset of assets) {
+            await octokit.rest.repos.uploadReleaseAsset({
+                ...REPO,
+                release_id: release.data.id,
+                name: basename(asset),
+                data: (await fs.readFile(asset)).toString()
+            });
+        }
+    } catch (error) {
+        console.error(error);
     }
-} catch (error) {
-    console.error(error);
 }

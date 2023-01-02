@@ -309,10 +309,17 @@ if (metadataPath) {
             generate_release_notes: true
         });
 
+        const uploadReleaseAsset = octokit.rest.repos.uploadReleaseAsset.defaults({
+            headers: {
+                'content-type': 'application/zip'
+            }
+        });
+
         console.log('Uploading assets...');
         const assets = await getFileNames('assets');
         for await (const asset of assets) {
-            await octokit.rest.repos.uploadReleaseAsset({
+            await octokit.request(`${uploadReleaseAsset.endpoint.DEFAULTS.method} ${uploadReleaseAsset.endpoint.DEFAULTS.url}`, {
+                ...uploadReleaseAsset.endpoint.DEFAULTS,
                 ...REPO,
                 release_id: release.data.id,
                 name: basename(asset),

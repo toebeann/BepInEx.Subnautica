@@ -296,6 +296,7 @@ if (metadataPath) {
     console.log('Committing metadata...');
     await git.add('.metadata.json');
     const commit = await git.commit('Updating metadata', [metadataPath]);
+    await git.push();
 
     try {
         console.log('Creating release...');

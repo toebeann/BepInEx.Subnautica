@@ -1,0 +1,46 @@
+name: update and release
+
+on:
+    push:
+        branches: ["main"]
+    schedule:
+        - cron: "0 0,6,12,18 * * *"
+    workflow_dispatch:
+
+jobs:
+    update-and-release:
+        runs-on: "ubuntu-latest"
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Setup node.js @ 18
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+
+            - name: Setup pnpm @ 7
+              uses: pnpm/action-setup@v2
+              with:
+                  version: 7
+
+            - name: Get pnpm store directory
+              id: pnpm-cache
+              shell: bash
+              run: |
+                  echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+            - name: Setup pnpm cache
+              uses: actions/cache@v3
+              with:
+                  path: ${{ steps.pnpm-cache-outputs.STORE_PATH }}
+                  key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pnpm-store-
+
+            - name: Install dependencies
+              run: pnpm i
+
+            - name: Update and release 🚀
+              run: pnpm start

@@ -245,6 +245,9 @@ const git = simpleGit();
 const sha = await git.revparse(['HEAD']);
 console.log(sha);
 
+const addResult = await git.add('.');
+console.log(addResult);
+
 const commit = await git.commit('Updating metadata');
 console.log(commit);
 

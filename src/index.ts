@@ -17,15 +17,21 @@ import {
 
 dotenv.config();
 
+if (!env.GITHUB_PERSONAL_ACCESS_TOKEN) {
+    console.error('GitHub PAT not set.');
+    exit(1);
+}
+
 const REPO = { owner: 'toebeann', repo: 'bepinex.subnautica' };
 const BEPINEX_REPO = { owner: 'BepInEx', repo: 'BepInEx' };
 const PAYLOAD_DIR = 'payload';
 const ASSETS_DIR = 'assets';
 const METADATA_FILE = '.metadata.json';
+const BepInExReleaseTypes = ['x86', 'x64', 'unix'] as const;
 
+type BepInExReleaseType = typeof BepInExReleaseTypes[number];
 type Release = Awaited<ReturnType<typeof octokit.rest.repos.getRelease>>['data'];
 type Asset = Release['assets'][0];
-type BepInExReleaseType = 'x86' | 'x64' | 'unix';
 
 interface Metadata {
     version?: string,
@@ -145,11 +151,20 @@ const embedPayload = async (buffer: ArrayBuffer, type: BepInExReleaseType) => {
     const zip = await JSZip.loadAsync(buffer); // read the contents of the archive
 
     // embed payload
-    for (const path of await getFileNames(PAYLOAD_DIR)) {
-        if (basename(path).toLowerCase().endsWith('run_bepinex.sh') && type !== 'unix') {
-            continue;
+    for (const path of (await getFileNames(PAYLOAD_DIR)).sort()) {
+        const name = basename(path);
+        const ext = name.split('.').at(-1);
+
+        let relativePath = relative(PAYLOAD_DIR, path);
+        if (ext && BepInExReleaseTypes.includes(ext as BepInExReleaseType)) {
+            if (ext !== type) {
+                continue;
+            }
+
+            relativePath = relativePath.substring(0, relativePath.length - ext.length - 1); // trim the extension from the path
         }
-        zip.file(relative(PAYLOAD_DIR, path), await fs.readFile(path));
+
+        zip.file(relativePath, await fs.readFile(path));
     }
 
     return zip;
@@ -182,11 +197,6 @@ const handleAsset = async (release: Release, type: BepInExReleaseType) => {
     } catch {
         return { asset, type, success: false };
     }
-}
-
-if (!env.GITHUB_PERSONAL_ACCESS_TOKEN) {
-    console.error('GitHub PAT not set.');
-    exit(1);
 }
 
 const octokit = new Octokit({

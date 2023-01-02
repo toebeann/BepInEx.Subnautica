@@ -21,7 +21,7 @@ In particular, this pack comes with preconfigured `BepInEx.cfg` that enables the
 
 ## Installation (manual)
 
-If you are installing this manually, do the following:
+To install manually, follow these instructions:
 
 1. Download the relevant archive:
     - For Windows and Linux/SteamDeck, download the archive designated `x64`.
@@ -30,7 +30,7 @@ If you are installing this manually, do the following:
     - On Windows and Linux/SteamDeck, the game folder is where the game executable `Subnautica.exe` is located.
     - On macOS, the game folder is where the game executable `Subnautica.app` is located.
 3. Run the game. If everything runs correctly, you will see BepInEx console pop up on your desktop.
-4. Follow either Windows, Linux/SteamDeck or macOS game running instructions below:
+4. Follow the configuration instructions for Windows, Linux/SteamDeck or macOS below:
 
 ### Configuration (Windows)
 

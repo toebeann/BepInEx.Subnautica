@@ -242,7 +242,7 @@ if (metadata.version
     && satisfies(version, new SemVerRange(`<= ${previousVersion}`, { loose: true, includePrerelease: true }))) { // check internal version
     // both bepinex and this package have not released an update since last check, so we should cancel
     console.log('No updates since last check.');
-    exit(1);
+    exit(0);
 }
 
 // we have a new (or unknown) release, let's handle it

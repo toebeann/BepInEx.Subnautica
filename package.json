@@ -17,6 +17,10 @@
   "funding": [
     "https://github.com/toebeann/bepinex.subnautica?sponsor=1",
     {
+      "type": "ko-fi",
+      "url": "https://ko-fi.com/toebean_"
+    },
+    {
       "type": "github",
       "url": "https://github.com/sponsors/toebeann"
     },

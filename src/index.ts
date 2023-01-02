@@ -184,6 +184,11 @@ const handleAsset = async (release: Release, type: BepInExReleaseType) => {
     }
 }
 
+if (!env.GITHUB_PERSONAL_ACCESS_TOKEN) {
+    console.error('GitHub PAT not set.');
+    exit(1);
+}
+
 const octokit = new Octokit({
     auth: env.GITHUB_PERSONAL_ACCESS_TOKEN
 });
@@ -252,12 +257,15 @@ if (handled.every(result => !result.success)) {
 
 await writeMetadataToDisk(metadata); // update metadata
 
-console.log('Creating commit...');
 const git = simpleGit();
-await git.add('.metadata.json');
-const commit = await git.commit('Updating metadata', ['.metadata.json']);
+const status = await git.status();
+const changedFiles = [...status.not_added, ...status.modified];
+const metadataPath = changedFiles.find(file => file.endsWith(METADATA_FILE));
+if (metadataPath) {
+    console.log('Committing metadata...');
+    await git.add('.metadata.json');
+    const commit = await git.commit('Updating metadata', [metadataPath]);
 
-if (env.GITHUB_PERSONAL_ACCESS_TOKEN) {
     try {
         console.log('Creating release...');
         const release = await octokit.rest.repos.createRelease({
@@ -282,4 +290,7 @@ if (env.GITHUB_PERSONAL_ACCESS_TOKEN) {
     } catch (error) {
         console.error(error);
     }
+} else {
+    console.error('Metadata unchanged!');
+    exit(1);
 }

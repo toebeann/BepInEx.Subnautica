@@ -321,6 +321,7 @@ if (metadataPath) {
         }
     } catch (error) {
         console.error(error);
+        exit(1);
     }
 } else {
     console.error('Metadata unchanged!');

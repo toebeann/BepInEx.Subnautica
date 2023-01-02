@@ -251,9 +251,7 @@ await writeMetadataToDisk(metadata); // update metadata
 
 const git = simpleGit();
 
-const sha = await git.revparse(['HEAD']);
-console.log(sha);
-
+await git.add('.metadata.json');
 const commit = await git.commit('Updating metadata', ['.metadata.json']);
 console.log(commit);
 

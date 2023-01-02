@@ -2,7 +2,7 @@
 
 # BepInEx.Subnautica
 
-This is a [BepInEx](https://github.com/BepInEx/BepInEx) pack for Subnautica. Preconfigured and ready to use.
+This is a [BepInEx](https://github.com/BepInEx/BepInEx) pack for Subnautica, preconfigured and ready to use.
 
 BepInEx is a general purpose framework for Unity modding.
 BepInEx includes tools and libraries to

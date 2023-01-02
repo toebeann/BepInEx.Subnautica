@@ -3,6 +3,8 @@ import { env, exit } from 'node:process';
 import { basename, join, relative, resolve } from 'node:path';
 import dotenv from 'dotenv';
 import { simpleGit } from 'simple-git';
+import { getInput } from '@actions/core';
+import { context } from '@actions/github';
 import { Octokit } from 'octokit';
 import { RequestError } from '@octokit/request-error';
 import JSZip from 'jszip';
@@ -21,6 +23,20 @@ if (!env.GITHUB_PERSONAL_ACCESS_TOKEN) {
     console.error('GitHub PAT not set.');
     exit(1);
 }
+
+const { pusher } = context.payload;
+const gitConfigName: string = getInput('git-config-email')
+    ? getInput('git-config-email')
+    : (pusher?.name
+        ? pusher.name
+        : (env.GITHUB_ACTOR
+            ? env.GITHUB_ACTOR
+            : 'GitHub Workflow Update and Release'));
+const gitConfigEmail: string = getInput('git-config-email')
+    ? getInput('git-config-email')
+    : (pusher?.email
+        ? pusher.email
+        : `${env.GITHUB_ACTOR ?? 'github-workflow-update-and-release'}@users.noreply.github.com`);
 
 const REPO = { owner: 'toebeann', repo: 'bepinex.subnautica' };
 const BEPINEX_REPO = { owner: 'BepInEx', repo: 'BepInEx' };
@@ -272,6 +288,11 @@ const status = await git.status();
 const changedFiles = [...status.not_added, ...status.modified];
 const metadataPath = changedFiles.find(file => file.endsWith(METADATA_FILE));
 if (metadataPath) {
+    await git.addConfig('safe.directory', env.GITHUB_WORKSPACE || '', false, 'global');
+    await git.addConfig('user.name', gitConfigName);
+    await git.addConfig('user.email', gitConfigEmail);
+    await git.addConfig('core.ignorecase', 'false');
+
     console.log('Committing metadata...');
     await git.add('.metadata.json');
     const commit = await git.commit('Updating metadata', [metadataPath]);

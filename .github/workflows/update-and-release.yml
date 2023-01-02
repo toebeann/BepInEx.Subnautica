@@ -44,3 +44,5 @@ jobs:
 
             - name: Update and release 🚀
               run: pnpm start
+              env:
+                  GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}

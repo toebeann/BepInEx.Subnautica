@@ -2,8 +2,6 @@
   "name": "bepinex-subnautica",
   "version": "1.0.0",
   "description": "BepInEx pack for Subnautica. Preconfigured and ready to use.",
-  "main": "dist/index.js",
-  "types": "./types/index.d.ts",
   "author": "Tobey Blaber (https://github.com/toebeann)",
   "license": "LGPL-2.1",
   "homepage": "https://github.com/toebeann/bepinex.subnautica",

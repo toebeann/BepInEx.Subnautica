@@ -309,7 +309,6 @@ if (metadataPath) {
             generate_release_notes: true
         });
 
-
         console.log('Uploading assets...');
         const assets = await getFileNames('assets');
         for await (const asset of assets) {

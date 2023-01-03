@@ -1,5 +1,5 @@
 {
-  "name": "bepinex.subnautica",
+  "name": "bepinex-subnautica",
   "version": "1.0.0",
   "description": "BepInEx pack for Subnautica. Preconfigured and ready to use.",
   "main": "dist/index.js",

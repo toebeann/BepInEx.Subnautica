@@ -51,7 +51,8 @@ type Asset = Release['assets'][0];
 
 interface Metadata {
     version?: string,
-    source?: string
+    source?: string,
+    payloadVersion?: string
 }
 
 const assetFilter = (asset: Asset, type: BepInExReleaseType, unityMono: boolean) =>
@@ -84,7 +85,8 @@ const getMetadata = async (): Promise<Metadata> => {
 const createMetadata = (release: Release): Metadata => {
     return {
         version: getVersion(release),
-        source: release.html_url
+        source: release.html_url,
+        payloadVersion: env.npm_package_version
     };
 };
 
@@ -251,11 +253,13 @@ if (!env.npm_package_version) {
 }
 
 const version = `${metadata.version}-payload.${parse(env.npm_package_version, true)}`;
-const previousVersion = `${previousMetadata.version}-payload.${latestReleaseVersion}`;
+
+console.log(`Latest release: ${latestReleaseVersion}`);
+console.log(`New version: ${version}`);
 
 if (metadata.version
     && satisfies(metadata.version, new SemVerRange(`<= ${previousMetadata.version}`), { loose: true, includePrerelease: true }) // check bepinex release
-    && satisfies(version, new SemVerRange(`<= ${previousVersion}`, { loose: true, includePrerelease: true }))) { // check internal version
+    && satisfies(version, new SemVerRange(`<= ${latestReleaseVersion}`, { loose: true, includePrerelease: true }))) { // check internal version
     // both bepinex and this package have not released an update since last check, so we should cancel
     console.log('No updates since last check.');
     exit(0);

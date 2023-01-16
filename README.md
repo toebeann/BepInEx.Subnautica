@@ -25,7 +25,7 @@ To install manually, follow these instructions:
 1. Download the relevant archive:
     - For Windows and Linux/SteamDeck, download the archive designated `x64`.
     - For macOS, download the archive designated `*nix`.
-2. Extract the downloaded archive into the game folder:
+2. Extract the contents of the downloaded archive into the game folder:
     - On Windows and Linux/SteamDeck, the game folder is the folder containing the game executable `Subnautica.exe`.
     - On macOS, the game folder is the folder containing the game executable `Subnautica.app`.
 3. Run the game. If everything runs correctly, you will see BepInEx console pop up on your desktop.

@@ -26,8 +26,8 @@ To install manually, follow these instructions:
     - For Windows and Linux/SteamDeck, download the archive designated `x64`.
     - For macOS, download the archive designated `*nix`.
 2. Extract the downloaded archive into the game folder:
-    - On Windows and Linux/SteamDeck, the game folder is where the game executable `Subnautica.exe` is located.
-    - On macOS, the game folder is where the game executable `Subnautica.app` is located.
+    - On Windows and Linux/SteamDeck, the game folder is the folder containing the game executable `Subnautica.exe`.
+    - On macOS, the game folder is the folder containing the game executable `Subnautica.app`.
 3. Run the game. If everything runs correctly, you will see BepInEx console pop up on your desktop.
 4. Follow the configuration instructions for Windows, Linux/SteamDeck or macOS below:
 
@@ -52,13 +52,13 @@ No need to configure. Simply run the game as usual i.e. by launching from Steam/
     ```
     Make sure to replace `<path to game folder>` with the path to the folder where Subnautica is installed!
 3. Run the game via Steam.
-4. At this point, you may see a prompt warning you that "libdoorstop_x64.dylib" cannot be opened because the developer is unverified. In this case:
+4. At this point, you may see a prompt warning you that `libdoorstop_x64.dylib` cannot be opened because the developer is unverified. In this case:
    1. Open System Preferences.
    2. Go to Security & Privacy and select the General tab.
-   3. Towards the bottom you should see a message saying that the program was blocked from opening. Click "Open Anyway" and confirm the prompt that pops up.
+   3. Towards the bottom you should see a message saying that the program was blocked from opening. Click `Open Anyway` and confirm the prompt that pops up.
    4. Run the game via Steam.
 
-At this moment you will not see any clear indication that BepInEx is working. It is suggested to test by installing a simple plugin such as [ConfigurationManager](https://www.nexusmods.com/subnautica/mods/1112) and then pressing F5 to open the Configuration Manager window.
+At this moment you will not see any clear indication that BepInEx is working. It is suggested to test by installing a simple plugin such as [Configuration Manager](https://www.nexusmods.com/subnautica/mods/1112) and then pressing F5 to open the Configuration Manager window.
 
 ## Useful links
 

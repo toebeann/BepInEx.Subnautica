@@ -1,0 +1,7 @@
+[Logging.Disk]
+WriteUnityLog = true
+
+[Preloader.Entrypoint]
+Assembly = Assembly-CSharp.dll
+Type = SystemsSpawner
+Method = Awake

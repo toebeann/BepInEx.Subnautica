@@ -28,8 +28,12 @@ To install manually, follow these instructions:
 2. Extract the contents of the downloaded archive into the game folder:
     - On Windows and Linux/SteamDeck, the game folder is the folder containing the game executable `Subnautica.exe`.
     - On macOS, the game folder is the folder containing the game executable `Subnautica.app`.
-3. Run the game. If everything runs correctly, you will see BepInEx console pop up on your desktop.
-4. Follow the configuration instructions for Windows, Linux/SteamDeck or macOS below:
+3. If you are on the `legacy` branch of Subnautica, follow these steps for compatibility with QModManager, otherwise simply skip to step 4:
+   1. Navigate to the `<path to game folder>\BepInEx\config` folder.
+   2. Rename the file `BepInEx.cfg` to `BepInEx.stable.cfg`.
+   3. Rename the file `BepInEx.legacy.cfg` to `BepInEx.cfg`.
+4. Run the game. If everything runs correctly, you will see BepInEx console pop up on your desktop.
+5. Follow the configuration instructions for Windows, Linux/SteamDeck or macOS below:
 
 ### Configuration (Windows)
 

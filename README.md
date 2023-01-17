@@ -32,6 +32,8 @@ To install manually, follow these instructions:
    1. Navigate to the `<path to game folder>\BepInEx\config`.
    2. Rename the file `BepInEx.cfg` to `BepInEx.stable.cfg`.
    3. Rename the file `BepInEx.legacy.cfg` to `BepInEx.cfg`.
+   
+   **Note**: If you later migrate to the stable branch, you should undo these changes.
 4. Run the game. If everything runs correctly, you will see BepInEx console pop up on your desktop.
 5. Follow the configuration instructions for Windows, Linux/SteamDeck or macOS below:
 

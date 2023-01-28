@@ -38,15 +38,15 @@ In particular, this pack comes with preconfigured `BepInEx.cfg` that enables the
 To install manually, follow these instructions:
 
 1. Download the relevant archive:
-    - For Windows and Linux/SteamDeck, download the archive designated `x64`.
-    - For macOS, download the archive designated `*nix`.
+    - For Windows and Linux/SteamDeck, download the archive designated `x64`
+    - For macOS, download the archive designated `*nix`
 2. Extract the contents of the downloaded archive into the game folder:
-    - On Windows and Linux/SteamDeck, the game folder is the folder containing the game executable `Subnautica.exe`.
-    - On macOS, the game folder is the folder containing the game executable `Subnautica.app`.
+    - On Windows and Linux/SteamDeck, the game folder is the folder containing the game executable `Subnautica.exe`
+    - On macOS, the game folder is the folder containing the game executable `Subnautica.app`
 3. If you are on the `legacy` branch of Subnautica, follow these steps for compatibility with QModManager, otherwise skip to step 4:
-   1. Navigate to `<path to game folder>\BepInEx\config`.
-   2. Rename the file `BepInEx.cfg` to `BepInEx.stable.cfg`.
-   3. Rename the file `BepInEx.legacy.cfg` to `BepInEx.cfg`.
+   1. Navigate to `<path to game folder>\BepInEx\config`
+   2. Rename the file `BepInEx.cfg` to `BepInEx.stable.cfg`
+   3. Rename the file `BepInEx.legacy.cfg` to `BepInEx.cfg`
    
    **Note**: If you later migrate to the stable branch, you should undo these changes.
 4. Run the game. If everything runs correctly, you will see BepInEx console pop up on your desktop.
@@ -62,22 +62,22 @@ No need to configure. Simply run the game as usual i.e. by launching from Steam/
     ```
     WINEDLLOVERRIDES="winhttp=n,b" %command%
     ```
-2. Run the game via Steam.
+2. Run the game via Steam
 
 ### Configuration (macOS)
 
-1. Make the `run_bepinex.sh` executable with `chmod u+x run_bepinex.sh`.
+1. Make the `run_bepinex.sh` executable with `chmod u+x run_bepinex.sh`
 2. In Steam, go to the game's properties and set the launch arguments to:
     ```
     "<path to game folder>/run_bepinex.sh" %command%
     ```
     Make sure to replace `<path to game folder>` with the path to the folder where Subnautica is installed!
-3. Run the game via Steam.
+3. Run the game via Steam
 4. At this point, you may see a prompt warning you that `libdoorstop_x64.dylib` cannot be opened because the developer is unverified. In this case:
-   1. Open System Preferences.
-   2. Go to Security & Privacy and select the General tab.
+   1. Open System Preferences
+   2. Go to Security & Privacy and select the General tab
    3. Towards the bottom you should see a message saying that the program was blocked from opening. Click `Open Anyway` and confirm the prompt that pops up.
-   4. Run the game via Steam.
+   4. Run the game via Steam
 
 At this moment you will not see any clear indication that BepInEx is working. It is suggested to test by installing a simple plugin such as [Configuration Manager](https://www.nexusmods.com/subnautica/mods/1112) and then pressing F5 to open the Configuration Manager window.
 

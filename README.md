@@ -93,7 +93,9 @@ At this moment you will not see any clear indication that BepInEx is working. It
 
 ## Issues, questions, etc.
 
-At this moment, you can use the following channels to ask for help
+[There is an FAQ in the stickies of the Posts tab on Nexus Mods](https://www.nexusmods.com/subnautica/mods/1108?tab=posts), try seeing if there is an answer to your question/issue there.
+
+If not, at this moment, you can use the following channels to ask for help
 
 -   [Subnautica Modding Community Discord](https://discord.gg/UpWuWwq)
 -   [BepInEx Discord](https://discord.gg/MpFEDAg) -- **Only technical support for THIS PACKAGE. No support for plugins.**

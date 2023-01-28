@@ -18,6 +18,21 @@ BepInEx is currently [one of the most popular modding tools for Unity on GitHub]
 This pack is preconfigured and ready to use for Subnautica modding.  
 In particular, this pack comes with preconfigured `BepInEx.cfg` that enables the BepInEx console and more extensive logging.
 
+## QMODMANAGER AND LEGACY BRANCH PLAYERS
+
+[Please see the sticky post at the top of the Posts tab on Nexus Mods.](https://www.nexusmods.com/subnautica/mods/1108?tab=posts)
+
+## General FAQ
+
+[There is an FAQ in the stickies of the Posts tab on Nexus Mods.](https://www.nexusmods.com/subnautica/mods/1108?tab=posts)
+
+## Installation (automatic, Windows only)
+
+1. Install [Vortex Mod Manager](https://www.nexusmods.com/about/vortex/) and the [Subnautica Support](https://www.nexusmods.com/site/mods/202) Vortex extension if you haven't already. Make sure they're fully up-to-date.
+2. Click the Vortex button at the top of [the Nexus Mods mod page](https://www.nexusmods.com/subnautica/mods/1108) to install. You can also use [this link](https://www.nexusmods.com/Core/Libs/Common/Widgets/DownloadPopUp?id=4494&nmm=1&game_id=1155).
+    - If you have QModManager installed, Vortex might notify you to reinstall/uninstall QModManager. Just do whatever it says.
+3. Run the game. If everything runs correctly, you will see the BepInEx console pop up on your desktop.
+
 ## Installation (manual)
 
 To install manually, follow these instructions:

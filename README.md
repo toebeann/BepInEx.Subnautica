@@ -93,7 +93,7 @@ At this moment you will not see any clear indication that BepInEx is working. It
 
 ## Issues, questions, etc.
 
-[There is an FAQ in the stickies of the Posts tab on Nexus Mods](https://www.nexusmods.com/subnautica/mods/1108?tab=posts), try seeing if there is an answer to your question/issue there.
+[First check the FAQ in the stickies of the Posts tab on Nexus Mods to see if there is an answer to your question/issue.](https://www.nexusmods.com/subnautica/mods/1108?tab=posts)
 
 If not, at this moment, you can use the following channels to ask for help
 

@@ -49,8 +49,9 @@ To install manually, follow these instructions:
    3. Rename the file `BepInEx.legacy.cfg` to `BepInEx.cfg`
    
    **Note**: If you later migrate to the stable branch, you should undo these changes.
-4. Run the game. If everything runs correctly, you will see BepInEx console pop up on your desktop.
-5. Follow the configuration instructions for Windows, Linux/SteamDeck or macOS below:
+4. Depending on your operating system:
+    - Run the game. If everything runs correctly, you will see BepInEx console pop up on your desktop.
+    - Linux/SteamDeck & macOS users, follow the configuration instructions for your operating system below:
 
 ### Configuration (Windows)
 
@@ -66,7 +67,7 @@ No need to configure. Simply run the game as usual i.e. by launching from Steam/
 
 ### Configuration (macOS)
 
-1. Make the `run_bepinex.sh` executable with `chmod u+x run_bepinex.sh`
+1. Make the `run_bepinex.sh` executable in Terminal with `chmod u+x run_bepinex.sh`
 2. In Steam, go to the game's properties and set the launch arguments to:
     ```
     "<path to game folder>/run_bepinex.sh" %command%

@@ -50,8 +50,8 @@ To install manually, follow these instructions:
    
    **Note**: If you later migrate to the stable branch, you should undo these changes.
 4. Depending on your operating system:
-    - Run the game. If everything runs correctly, you will see BepInEx console pop up on your desktop.
-    - Linux/SteamDeck & macOS users, follow the configuration instructions for your operating system below:
+    - Windows users: Run the game. If everything runs correctly, you will see BepInEx console pop up on your desktop.
+    - Linux/SteamDeck & macOS users: Follow the configuration instructions for your operating system below:
 
 ### Configuration (Windows)
 

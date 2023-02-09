@@ -41,7 +41,7 @@ const gitConfigEmail: string = getInput('git-config-email')
 const REPO = { owner: 'toebeann', repo: 'bepinex.subnautica' };
 const BEPINEX_REPO = { owner: 'BepInEx', repo: 'BepInEx' };
 const PAYLOAD_DIR = 'payload';
-const ASSETS_DIR = 'assets';
+const DIST_DIR = 'dist';
 const METADATA_FILE = '.metadata.json';
 const BepInExReleaseTypes = ['x86', 'x64', 'unix'] as const;
 
@@ -203,8 +203,8 @@ const handleAsset = async (release: Release, type: BepInExReleaseType) => {
             const buffer = await downloadAsset(asset, type);
             if (buffer) {
                 const x64Archive = await embedPayload(buffer, type);
-                await fs.ensureDir(ASSETS_DIR);
-                await writeZipToDisk(join(ASSETS_DIR, asset.name), x64Archive, type);
+                await fs.ensureDir(DIST_DIR);
+                await writeZipToDisk(join(DIST_DIR, asset.name), x64Archive, type);
                 return { asset, type, success: true };
             } else {
                 return { asset, type, success: false };
@@ -313,8 +313,8 @@ if (env.MODE !== 'dev') {
                 generate_release_notes: true
             });
 
-            console.log('Uploading assets...');
-            const assets = await getFileNames('assets');
+            console.log('Uploading release assets...');
+            const assets = await getFileNames(DIST_DIR);
             for await (const asset of assets) {
                 const uploadReleaseAsset = octokit.rest.repos.uploadReleaseAsset.defaults({
                     headers: {

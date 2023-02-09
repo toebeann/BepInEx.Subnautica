@@ -53,10 +53,6 @@ To install manually, follow these instructions:
     - Windows users: Run the game. If everything runs correctly, you will see BepInEx console pop up on your desktop.
     - Linux/SteamDeck & macOS users: Follow the configuration instructions for your operating system below:
 
-### Configuration (Windows)
-
-No need to configure. Simply run the game as usual i.e. by launching from Steam/Epic Games/etc. If everything is correct, you will see a console pop up.
-
 ### Configuration (Linux/SteamDeck)
 
 1. In Steam, go to the game's properties and set the launch arguments to:

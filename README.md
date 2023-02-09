@@ -1,4 +1,4 @@
-![BepInEx logo](https://avatars2.githubusercontent.com/u/39589027?s=256)
+![BepInEx logo](assets/logo.png)
 
 # BepInEx.Subnautica
 

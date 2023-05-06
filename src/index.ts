@@ -199,19 +199,17 @@ const handleAsset = async (release: Release, type: BepInExReleaseType) => {
 
     try {
         asset = getAsset(release, type);
-        if (asset) {
-            const buffer = await downloadAsset(asset, type);
-            if (buffer) {
-                const x64Archive = await embedPayload(buffer, type);
-                await fs.ensureDir(DIST_DIR);
-                await writeZipToDisk(join(DIST_DIR, asset.name), x64Archive, type);
-                return { asset, type, success: true };
-            } else {
-                return { asset, type, success: false };
-            }
-        } else {
+        if (!asset)
             return { asset, type, success: false };
-        }
+
+        const buffer = await downloadAsset(asset, type);
+        if (!buffer)
+            return { asset, type, success: false };
+
+        const x64Archive = await embedPayload(buffer, type);
+        await fs.ensureDir(DIST_DIR);
+        await writeZipToDisk(join(DIST_DIR, asset.name), x64Archive, type);
+        return { asset, type, success: true };
     } catch {
         return { asset, type, success: false };
     }
@@ -286,55 +284,57 @@ if (handled.every(result => !result.success)) {
 // at this point all assets have been successfully downloaded and saved to disk with embedded payloads
 await writeMetadataToDisk(metadata); // update metadata
 
-if (env.MODE !== 'dev') {
-    const git = simpleGit();
-    const status = await git.status();
-    const changedFiles = [...status.not_added, ...status.modified];
-    const metadataPath = changedFiles.find(file => file.endsWith(METADATA_FILE));
-    if (metadataPath) {
-        await git.addConfig('safe.directory', env.GITHUB_WORKSPACE || '', false, 'global');
-        await git.addConfig('user.name', gitConfigName);
-        await git.addConfig('user.email', gitConfigEmail);
-        await git.addConfig('core.ignorecase', 'false');
+if (env.MODE === 'dev')
+    exit(0);
 
-        console.log('Committing metadata...');
-        await git.add('.metadata.json');
-        const commit = await git.commit('Updating metadata', [metadataPath]);
-        await git.push();
+const git = simpleGit();
+const status = await git.status();
+const changedFiles = [...status.not_added, ...status.modified];
+const metadataPath = changedFiles.find(file => file.endsWith(METADATA_FILE));
 
-        try {
-            console.log('Creating release...');
-            const release = await octokit.rest.repos.createRelease({
-                ...REPO,
-                tag_name: `v${version}`,
-                target_commitish: commit.commit,
-                name: latestBepInExRelease.name ?? `BepInEx ${metadata.version}`,
-                body: latestBepInExRelease.body ?? undefined,
-                generate_release_notes: true
-            });
+if (!metadataPath) {
+    console.error('Metadata unchanged!');
+    exit(1);
+}
 
-            console.log('Uploading release assets...');
-            const assets = await getFileNames(DIST_DIR);
-            for await (const asset of assets) {
-                const uploadReleaseAsset = octokit.rest.repos.uploadReleaseAsset.defaults({
-                    headers: {
-                        'content-type': latestBepInExRelease.assets.find(a => a.name === basename(asset))?.content_type ?? 'application/x-zip-compressed'
-                    }
-                });
-                await octokit.request(`${uploadReleaseAsset.endpoint.DEFAULTS.method} ${uploadReleaseAsset.endpoint.DEFAULTS.url}`, {
-                    ...uploadReleaseAsset.endpoint.DEFAULTS,
-                    ...REPO,
-                    release_id: release.data.id,
-                    name: basename(asset),
-                    data: (await fs.readFile(asset))
-                });
+await git.addConfig('safe.directory', env.GITHUB_WORKSPACE || '', false, 'global');
+await git.addConfig('user.name', gitConfigName);
+await git.addConfig('user.email', gitConfigEmail);
+await git.addConfig('core.ignorecase', 'false');
+
+console.log('Committing metadata...');
+await git.add('.metadata.json');
+const commit = await git.commit('Updating metadata', [metadataPath]);
+await git.push();
+
+try {
+    console.log('Creating release...');
+    const release = await octokit.rest.repos.createRelease({
+        ...REPO,
+        tag_name: `v${version}`,
+        target_commitish: commit.commit,
+        name: latestBepInExRelease.name ?? `BepInEx ${metadata.version}`,
+        body: latestBepInExRelease.body ?? undefined,
+        generate_release_notes: true
+    });
+
+    console.log('Uploading release assets...');
+    const assets = await getFileNames(DIST_DIR);
+    for await (const asset of assets) {
+        const uploadReleaseAsset = octokit.rest.repos.uploadReleaseAsset.defaults({
+            headers: {
+                'content-type': latestBepInExRelease.assets.find(a => a.name === basename(asset))?.content_type ?? 'application/x-zip-compressed'
             }
-        } catch (error) {
-            console.error(error);
-            exit(1);
-        }
-    } else {
-        console.error('Metadata unchanged!');
-        exit(1);
+        });
+        await octokit.request(`${uploadReleaseAsset.endpoint.DEFAULTS.method} ${uploadReleaseAsset.endpoint.DEFAULTS.url}`, {
+            ...uploadReleaseAsset.endpoint.DEFAULTS,
+            ...REPO,
+            release_id: release.data.id,
+            name: basename(asset),
+            data: (await fs.readFile(asset))
+        });
     }
+} catch (error) {
+    console.error(error);
+    exit(1);
 }

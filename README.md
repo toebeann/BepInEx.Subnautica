@@ -67,12 +67,16 @@ To install manually, follow these instructions:
 
 ### Configuration (macOS)
 
-1. Make the `run_bepinex.sh` executable in Terminal with `chmod u+x run_bepinex.sh`
+1. Make the `run_bepinex.sh` executable by running this command in Terminal:
+    ```
+    chmod u+x "<path to game folder>/run_bepinex.sh"
+    ```
+    **Note**: Make sure to replace `<path to game folder>` with the path to the folder where Subnautica is installed!
 2. In Steam, go to the game's properties and set the launch arguments to:
     ```
     "<path to game folder>/run_bepinex.sh" %command%
     ```
-    Make sure to replace `<path to game folder>` with the path to the folder where Subnautica is installed!
+    **Note**: Make sure to replace `<path to game folder>` with the path to the folder where Subnautica is installed!
 3. Run the game via Steam
 4. At this point, you may see a prompt warning you that `libdoorstop_x64.dylib` cannot be opened because the developer is unverified. In this case:
    1. Open System Preferences

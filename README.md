@@ -98,5 +98,4 @@ At this moment you will not see any clear indication that BepInEx is working. It
 
 If not, at this moment, you can use the following channels to ask for help
 
--   [Subnautica Modding Community Discord](https://discord.gg/UpWuWwq)
 -   [BepInEx Discord](https://discord.gg/MpFEDAg) -- **Only technical support for THIS PACKAGE. No support for plugins.**

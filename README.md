@@ -32,7 +32,7 @@ The TL;DR is that QModManager is compatibile with BepInEx, [but there are some t
 
 ## Installation (automatic, Windows only)
 
-1. Install [Vortex Mod Manager](https://www.nexusmods.com/about/vortex/) and the [Subnautica Support](https://www.nexusmods.com/site/mods/202) Vortex extension if you haven't already. Make sure they're fully up-to-date.
+1. Install [Vortex Mod Manager](https://www.nexusmods.com/about/vortex/) and the [Subnautica Support](https://www.nexusmods.com/site/mods/202) Vortex extension if you haven't already (Vortex should usually install the extension for you). Make sure they're fully up-to-date.
 2. Click the Vortex button at the top of [the Nexus Mods mod page](https://www.nexusmods.com/subnautica/mods/1108) to install.
     - If you have QModManager installed, Vortex might notify you to reinstall/uninstall QModManager. Just do whatever it says.
 3. Run the game. If everything runs correctly, you will see the BepInEx console pop up on your desktop.

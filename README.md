@@ -43,6 +43,14 @@ The TL;DR is that QModManager is compatibile with BepInEx, [but there are some t
 
 ## Installation (manual)
 
+**IMPORTANT NOTE**: If you later install QModManager, please make sure to choose **NOT** to overwrite any files when you do.
+
+This is because QModManager overwrites this pack's files with an old version of BepInEx, and many BepInEx plugins require the latest version. QModManager is compatible with this pack's version of BepInEx.
+
+If you do overwrite files when you install QModManager, you will need to reinstall this pack for some BepInEx plugins to work.
+
+***
+
 To install manually, follow these instructions:
 
 1. Download the relevant archive:

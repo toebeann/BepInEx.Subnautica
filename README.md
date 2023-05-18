@@ -32,7 +32,7 @@ The TL;DR is that QModManager is compatibile with BepInEx, [but there are some t
 
 ## Installation (automatic, Windows only)
 
-1. Install [Vortex Mod Manager](https://www.nexusmods.com/about/vortex/) and the [Subnautica Support](https://www.nexusmods.com/site/mods/202) Vortex extension if you haven't already. Make sure they're fully up-to-date.
+1. Install [Vortex Mod Manager](https://www.nexusmods.com/about/vortex/) and the [Subnautica Support](https://www.nexusmods.com/site/mods/202) Vortex extension if you haven't already (Vortex should usually install the extension for you). Make sure they're fully up-to-date.
 2. Click the Vortex button at the top of [the Nexus Mods mod page](https://www.nexusmods.com/subnautica/mods/1108) to install.
     - If you have QModManager installed, Vortex might notify you to reinstall/uninstall QModManager. Just do whatever it says.
 3. Run the game. If everything runs correctly, you will see the BepInEx console pop up on your desktop.
@@ -42,6 +42,14 @@ The TL;DR is that QModManager is compatibile with BepInEx, [but there are some t
 [Click here for an idiot's guide to macOS installation.](https://github.com/toebeann/BepInEx.Subnautica/wiki/Idiot's-guide-to-macOS-installation)
 
 ## Installation (manual)
+
+**IMPORTANT NOTE**: If you later install QModManager, please make sure to choose **NOT** to overwrite any files when you do.
+
+This is because QModManager overwrites this pack's files with an old version of BepInEx, and many BepInEx plugins require the latest version. QModManager is compatible with this pack's version of BepInEx.
+
+If you do overwrite files when you install QModManager, you will need to reinstall this pack for some BepInEx plugins to work.
+
+***
 
 To install manually, follow these instructions:
 
@@ -90,6 +98,8 @@ To install manually, follow these instructions:
 
 At this moment you will not see any clear indication that BepInEx is working. It is suggested to test by installing a simple plugin such as [Configuration Manager](https://www.nexusmods.com/subnautica/mods/1112) and then pressing F5 to open the Configuration Manager window.
 
+If you also wish to use QModManager, you will need to follow the [Installing QModManager on macOS](https://github.com/toebeann/BepInEx.Subnautica/wiki/Installing-QModManager-on-macOS) guide to get QModManager to work on macOS.
+
 ## Useful links
 
 -   [Third-party site with a list of known compatible BepInEx plugins](https://ramuneneptune.github.io/modlists/sn.html)
@@ -102,7 +112,7 @@ At this moment you will not see any clear indication that BepInEx is working. It
 
 ## Issues, questions, etc.
 
-[First check the FAQ in the stickies of the Posts tab on Nexus Mods to see if there is an answer to your question/issue.](https://www.nexusmods.com/subnautica/mods/1108?tab=posts)
+[First, check the FAQ to see if there is an answer to your question/issue.](https://github.com/toebeann/BepInEx.Subnautica/wiki/FAQ)
 
 If not, at this moment, you can use the following channels to ask for help
 

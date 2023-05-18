@@ -281,11 +281,11 @@ if (handled.every(result => !result.success)) {
     exit(1);
 }
 
-// at this point all assets have been successfully downloaded and saved to disk with embedded payloads
-await writeMetadataToDisk(metadata); // update metadata
-
 if (env.MODE === 'dev')
     exit(0);
+
+// at this point all assets have been successfully downloaded and saved to disk with embedded payloads
+await writeMetadataToDisk(metadata); // update metadata
 
 const git = simpleGit();
 const status = await git.status();

@@ -20,7 +20,7 @@ In particular, this pack comes with
 
 - a preconfigured `BepInEx.cfg` that enables the BepInEx console and more extensive logging,
 - a preconfigured `BepInEx.legacy.cfg` for compatibility with legacy QModManager mods. Simply rename to `BepInEx.cfg` when using QModManager,
-- [Tobey.UnityAudio](https://github.com/toebeann/Tobey.UnityAudio), a configurable BepInEx patcher to automatically add Unity audio support when mods need it, and Also includes a preconfigured `Tobey.UnityAudio.cfg` for use with Subnautica.
+- [Tobey.UnityAudio](https://github.com/toebeann/Tobey.UnityAudio), a configurable BepInEx patcher to automatically add Unity audio support when mods need it, and
 - the following core assemblies for Unity v2019.4.36 which are missing on the `legacy` branch, for consistency when modding:
   - `netstandard.dll`,
   - `System.Net.Http.dll`,

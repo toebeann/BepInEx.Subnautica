@@ -15,11 +15,10 @@ BepInEx is currently [one of the most popular modding tools for Unity on GitHub]
 
 ## This pack's contents
 
-This pack is preconfigured and ready to use for Subnautica modding.  
+This pack is preconfigured and ready to use for Subnautica modding.
 In particular, this pack comes with
 
-- a preconfigured `BepInEx.cfg` that enables the BepInEx console and more extensive logging,
-- a preconfigured `BepInEx.legacy.cfg` for compatibility with legacy QModManager mods. Simply rename to `BepInEx.cfg` when using QModManager,
+- [Tobey.Subnautica.ConfigHandler](https://github.com/toebeann/Tobey.Subnautica.ConfigHandler), a configurable BepInEx patcher to automatically take care of BepInEx configuration for QModManager compatibility,
 - [Tobey.UnityAudio](https://github.com/toebeann/Tobey.UnityAudio), a configurable BepInEx patcher to automatically add Unity audio support when mods need it, and
 - the following core assemblies for Unity v2019.4.36 which are missing on the `legacy` branch, for consistency when modding:
   - `netstandard.dll`,

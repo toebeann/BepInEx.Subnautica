@@ -24,7 +24,7 @@ export DOORSTOP_INVOKE_DLL_PATH="$BASEDIR/BepInEx/core/BepInEx.Preloader.dll"
 
 # If specified, Doorstop will load core libraries from this folder instead of the normal Managed folder
 # Mainly usable to unstrip assemblies in some games
-export DOORSTOP_CORLIB_OVERRIDE_PATH=""
+export DOORSTOP_CORLIB_OVERRIDE_PATH="corlibs"
 
 # ----- DO NOT EDIT FROM THIS LINE FORWARD  ------
 # ----- (unless you know what you're doing) ------

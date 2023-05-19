@@ -44,6 +44,9 @@ const PAYLOAD_DIR = 'payload';
 const DIST_DIR = 'dist';
 const METADATA_FILE = '.metadata.json';
 const BepInExReleaseTypes = ['x86', 'x64', 'unix'] as const;
+const UNITY_VERSION = '2019.4.36';
+const includedCorlibs = ['netstandard.dll', 'System.Net.Http.dll', 'System.Runtime.Serialization.dll', 'System.Xml.Linq.dll'];
+const corlibsFilter = (corlib: string) => includedCorlibs.includes(corlib);
 
 type BepInExReleaseType = typeof BepInExReleaseTypes[number];
 type Release = Awaited<ReturnType<typeof octokit.rest.repos.getRelease>>['data'];
@@ -163,10 +166,25 @@ const downloadAsset = async (asset: Asset, type: BepInExReleaseType) => {
     return response.data;
 }
 
-const embedPayload = async (buffer: ArrayBuffer, type: BepInExReleaseType) => {
-    console.log(`Embedding payload in ${type} archive...`);
+const downloadCorlibs = async (unityVersion: string) => {
+    console.log(`Downloading core librariess for Unity version: ${unityVersion}...`);
 
-    const zip = await JSZip.loadAsync(buffer); // read the contents of the archive
+    try {
+        const response = await fetch(`https://unity.bepinex.dev/corlibs/${unityVersion}.zip`);
+
+        if (!response.ok) {
+            console.error(`Could not retrieve corlibs for Unity version: ${unityVersion}`, response.status, response.statusText, response.url);
+            return;
+        }
+
+        return response.arrayBuffer();
+    } catch (error) {
+        console.error(`Could not retrieve corlibs for Unity version: ${unityVersion}`, error);
+    }
+}
+
+const embedPayload = async (archive: JSZip, type: BepInExReleaseType) => {
+    console.log(`Embedding payload in ${type} archive...`);
 
     // embed payload
     for (const path of (await getFileNames(PAYLOAD_DIR)).sort()) {
@@ -186,10 +204,21 @@ const embedPayload = async (buffer: ArrayBuffer, type: BepInExReleaseType) => {
             .filter(ext => !typeFilters.includes(ext))
             .join('.');
         const relativePath = relative(PAYLOAD_DIR, join(dir, file));
-        zip.file(relativePath, await fs.readFile(path));
+        archive.file(relativePath, await fs.readFile(path));
     }
 
-    return zip;
+    return archive;
+}
+
+const embedCorlibs = async (archive: JSZip, buffer: ArrayBuffer, type: BepInExReleaseType) => {
+    console.log(`Embedding corlibs in ${type} archive...`);
+
+    const corlibs = await JSZip.loadAsync(buffer);
+    for (const path of Object.keys(corlibs.files).filter(corlibsFilter)) {
+        archive.file(join('corlibs', path), await corlibs.file(path)!.async('uint8array'));
+    }
+
+    return archive;
 }
 
 const writeZipToDisk = async (path: string, archive: JSZip, type: BepInExReleaseType) => {
@@ -198,7 +227,7 @@ const writeZipToDisk = async (path: string, archive: JSZip, type: BepInExRelease
     await fs.writeFile(resolve(path), data);
 }
 
-const handleAsset = async (release: Release, type: BepInExReleaseType) => {
+const handleAsset = async (release: Release, type: BepInExReleaseType, corlibsBuffer?: ArrayBuffer) => {
     let asset: ReturnType<typeof getAsset>;
 
     try {
@@ -206,13 +235,15 @@ const handleAsset = async (release: Release, type: BepInExReleaseType) => {
         if (!asset)
             return { asset, type, success: false };
 
-        const buffer = await downloadAsset(asset, type);
-        if (!buffer)
+        const assetBuffer = await downloadAsset(asset, type);
+        if (!assetBuffer)
             return { asset, type, success: false };
 
-        const x64Archive = await embedPayload(buffer, type);
+        const archive = await JSZip.loadAsync(assetBuffer);
+        await embedPayload(archive, type);
+        if (corlibsBuffer) await embedCorlibs(archive, corlibsBuffer, type);
         await fs.ensureDir(DIST_DIR);
-        await writeZipToDisk(join(DIST_DIR, asset.name), x64Archive, type);
+        await writeZipToDisk(join(DIST_DIR, asset.name), archive, type);
         return { asset, type, success: true };
     } catch {
         return { asset, type, success: false };
@@ -268,7 +299,13 @@ if (metadata.version
 }
 
 // we have a new (or unknown) release, let's handle it
-const handled = await Promise.all([handleAsset(latestBepInExRelease, 'x64'), handleAsset(latestBepInExRelease, 'unix')]); // create assets
+const corlibsBuffer = await downloadCorlibs(UNITY_VERSION);
+if (!corlibsBuffer) exit(1);
+
+const handled = await Promise.all([
+    handleAsset(latestBepInExRelease, 'x64', corlibsBuffer),
+    handleAsset(latestBepInExRelease, 'unix', corlibsBuffer),
+]); // create assets
 
 // check for failures
 const failed = handled.filter(result => !result.success && result.asset);

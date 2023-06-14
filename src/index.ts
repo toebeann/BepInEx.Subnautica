@@ -183,71 +183,66 @@ const downloadCorlibs = async (unityVersion: string) => {
     }
 }
 
-const embedPayload = async (archive: JSZip, type: BepInExReleaseType) => {
-    console.log(`Embedding payload in ${type} archive...`);
+const embedPayload = async (archive: JSZip) => {
+    console.log('Embedding payload in archive...');
 
-    // embed payload
     for (const path of (await getFileNames(PAYLOAD_DIR)).sort()) {
-        const base = basename(path);
-        const typeFilters = base
-            .split('.')
-            .slice(1)
-            .filter(ext => BepInExReleaseTypes.includes(ext as BepInExReleaseType));
-
-        if (typeFilters.length > 0 && !typeFilters.includes(type)) {
-            continue;
-        }
-
-        const dir = dirname(path);
-        const file = base
-            .split('.')
-            .filter(ext => !typeFilters.includes(ext))
-            .join('.');
-        const relativePath = relative(PAYLOAD_DIR, join(dir, file));
+        const relativePath = relative(PAYLOAD_DIR, path);
         archive.file(relativePath, await fs.readFile(path));
     }
 
     return archive;
 }
 
-const embedCorlibs = async (archive: JSZip, buffer: ArrayBuffer, type: BepInExReleaseType) => {
-    console.log(`Embedding corlibs in ${type} archive...`);
+const embedCorlibs = async (archive: JSZip, buffer: ArrayBuffer) => {
+    console.log('Embedding corlibs in archive...');
 
     const corlibs = await JSZip.loadAsync(buffer);
     for (const path of Object.keys(corlibs.files).filter(corlibsFilter)) {
-        archive.file(join('corlibs', path), await corlibs.file(path)!.async('uint8array'));
+        archive.file(
+            join('corlibs', path),
+            await corlibs.file(path)!.async('uint8array'),
+        );
     }
 
     return archive;
 }
 
-const writeZipToDisk = async (path: string, archive: JSZip, type: BepInExReleaseType) => {
-    console.log(`Writing ${type} archive to disk...`);
+const writeZipToDisk = async (path: string, archive: JSZip) => {
+    console.log('Writing archive to disk...');
     const data = await archive.generateInternalStream({ type: 'uint8array' }).accumulate();
     await fs.writeFile(resolve(path), data);
 }
 
-const handleAsset = async (release: Release, type: BepInExReleaseType, corlibsBuffer?: ArrayBuffer) => {
+const getAssetArchive = async (release: Release, type: BepInExReleaseType) => {
     let asset: ReturnType<typeof getAsset>;
-
     try {
         asset = getAsset(release, type);
-        if (!asset)
+        if (!asset) {
             return { asset, type, success: false };
+        }
 
         const assetBuffer = await downloadAsset(asset, type);
-        if (!assetBuffer)
+        if (!assetBuffer) {
             return { asset, type, success: false };
+        }
 
-        const archive = await JSZip.loadAsync(assetBuffer);
-        await embedPayload(archive, type);
-        if (corlibsBuffer) await embedCorlibs(archive, corlibsBuffer, type);
-        await fs.ensureDir(DIST_DIR);
-        await writeZipToDisk(join(DIST_DIR, asset.name), archive, type);
-        return { asset, type, success: true };
+        return { asset, type, success: true, archive: await JSZip.loadAsync(assetBuffer) };
     } catch {
         return { asset, type, success: false };
     }
+}
+
+const mergeArchives = async (...archives: JSZip[]) => {
+    const merged = new JSZip();
+
+    await Promise.all(archives.map(async (archive) => {
+        for (const [path, file] of Object.entries(archive.files)) {
+            merged.file(path, await file.async('uint8array'));
+        }
+    }));
+
+    return merged;
 }
 
 const octokit = new Octokit({
@@ -302,28 +297,37 @@ if (metadata.version
 const corlibsBuffer = await downloadCorlibs(UNITY_VERSION);
 if (!corlibsBuffer) exit(1);
 
-const handled = await Promise.all([
-    handleAsset(latestBepInExRelease, 'x64', corlibsBuffer),
-    handleAsset(latestBepInExRelease, 'unix', corlibsBuffer),
-]); // create assets
+const archives = await Promise.all([
+    getAssetArchive(latestBepInExRelease, "x64"),
+    getAssetArchive(latestBepInExRelease, "unix"),
+]);
 
 // check for failures
-const failed = handled.filter(result => !result.success && result.asset);
+const failed = archives.filter((result) => !result.success);
 if (failed.length > 0) {
     for (const failure of failed) {
-        console.error(`Failed to handle ${failure.type} asset`, failure.asset);
+        console.error(`Failed to get ${failure.type} archive`, failure.asset);
     }
-    console.error(`Encountered errors handling assets from repo /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`);
+    console.error(`Encountered errors getting assets from repo /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`);
     exit(1);
 }
 
-if (handled.every(result => !result.success)) {
+if (archives.every(result => !result.success)) {
     console.error(`No valid assets were found in repo /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`);
     exit(1);
 }
 
-if (env.MODE === 'dev')
+const merged = await mergeArchives(...archives.map((result) => result.archive!));
+await Promise.all([
+    embedCorlibs(merged, corlibsBuffer),
+    embedPayload(merged),
+    fs.ensureDir(DIST_DIR),
+]);
+await writeZipToDisk(join(DIST_DIR, "BepInEx.zip"), merged);
+
+if (env.MODE === 'dev') {
     exit(0);
+}
 
 // at this point all assets have been successfully downloaded and saved to disk with embedded payloads
 await writeMetadataToDisk(metadata); // update metadata

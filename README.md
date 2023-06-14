@@ -57,9 +57,7 @@ If you do overwrite files when you install QModManager, you will need to reinsta
 
 To install manually, follow these instructions:
 
-1. Download the relevant archive:
-    - For Windows and Linux/SteamDeck, download the archive designated `x64`
-    - For macOS, download the archive designated `*nix`
+1. [Download BepInEx](https://github.com/toebeann/BepInEx.Subnautica/releases/latest/download/BepInEx.zip)
 1. Extract the contents of the downloaded archive into the game folder:
     - On Windows and Linux/SteamDeck, the game folder is the folder containing the game executable `Subnautica.exe`
     - On macOS, the game folder is the folder containing the game executable `Subnautica.app`

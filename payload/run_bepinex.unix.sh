@@ -37,7 +37,7 @@ if [ "$2" = "SteamLaunch" ]; then
 fi
 
 if [ ! -x "$1" -a ! -x "$executable_name" ]; then
-    echo "Please open run.sh in a text editor and configure executable name."
+    echo "Please open run_bepinex.sh in a text editor and configure executable name."
     exit 1
 fi
 

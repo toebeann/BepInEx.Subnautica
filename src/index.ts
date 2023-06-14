@@ -236,11 +236,13 @@ const getAssetArchive = async (release: Release, type: BepInExReleaseType) => {
 const mergeArchives = async (...archives: JSZip[]) => {
     const merged = new JSZip();
 
-    await Promise.all(archives.map(async (archive) => {
-        for (const [path, file] of Object.entries(archive.files)) {
-            merged.file(path, await file.async('uint8array'));
+    for (const archive of archives) {
+        for (const path of Object.keys(archive.files)) {
+            if (merged.file(path)) continue; // skip if file already exists (first archive takes precedence)
+            const file = archive.file(path);
+            merged.file(path, await file!.async('uint8array'));
         }
-    }));
+    }
 
     return merged;
 }

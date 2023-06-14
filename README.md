@@ -1,6 +1,6 @@
 ![BepInEx logo](assets/logo.png)
 
-# BepInEx.Subnautica
+# Tobey's BepInEx Pack for Subnautica
 
 This is a [BepInEx](https://github.com/BepInEx/BepInEx) pack for Subnautica, preconfigured and ready to use.
 

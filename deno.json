@@ -1,0 +1,7 @@
+{
+    "fmt": {
+        "indentWidth": 4,
+        "lineWidth": 120,
+        "include": ["mod.ts"]
+    }
+}

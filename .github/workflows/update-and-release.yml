@@ -11,52 +11,38 @@ jobs:
     update-and-release:
         runs-on: "ubuntu-latest"
 
-        env:
-          DENO_DIR: deno-cache
-
         steps:
-            - name: Cache Deno dependencies
-              uses: actions/cache@v2
-              with:
-                path: ${{ env.DENO_DIR }}
-                key: ${{ runner.os }}-deno-${{ hashFiles('deno.lock') }}
-
             - name: Checkout repository
               uses: actions/checkout@v3
 
-            - name: Setup deno
-              uses: denoland/setup-deno@v1
+            - name: Setup node.js @ 18
+              uses: actions/setup-node@v3
               with:
-                deno-version: v1.x # Run with latest stable Deno.
+                  node-version: 18
 
-            # - name: Setup node.js @ 18
-            #   uses: actions/setup-node@v3
-            #   with:
-            #       node-version: 18
+            - name: Setup pnpm @ 8
+              uses: pnpm/action-setup@v2
+              with:
+                  version: 8
 
-            # - name: Setup pnpm @ 8
-            #   uses: pnpm/action-setup@v2
-            #   with:
-            #       version: 8
+            - name: Get pnpm store directory
+              id: pnpm-cache
+              shell: bash
+              run: |
+                  echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-            # - name: Get pnpm store directory
-            #   id: pnpm-cache
-            #   shell: bash
-            #   run: |
-            #       echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+            - name: Setup pnpm cache
+              uses: actions/cache@v3
+              with:
+                  path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+                  key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pnpm-store-
 
-            # - name: Setup pnpm cache
-            #   uses: actions/cache@v3
-            #   with:
-            #       path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-            #       key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-            #       restore-keys: |
-            #           ${{ runner.os }}-pnpm-store-
-
-            # - name: Install dependencies
-            #   run: pnpm i
+            - name: Install dependencies
+              run: pnpm i
 
             - name: Update and release 🚀
-              run: deno run --allow-all --lock=deno.lock mod.ts
+              run: pnpm start
               env:
                   GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}

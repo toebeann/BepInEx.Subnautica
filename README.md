@@ -97,7 +97,7 @@ At this moment you will not see any clear indication that BepInEx is working. It
 
 If you also wish to use QModManager, you will need to follow the [Installing QModManager on macOS](https://github.com/toebeann/BepInEx.Subnautica/wiki/Installing-QModManager-on-macOS) guide to get QModManager to work on macOS.
 
-### Configuration (macOS - other platforms)
+### Configuration (macOS - other platforms e.g. Epic Games)
 
 The best experience for modding Subnautica on macOS is via Steam. There is however a workaround which will let you run BepInEx plugins on macOS when you own the game on a non-Steam platform, e.g. Epic Games. Mods which require BepInEx patchers are not supported via this workaround.
 

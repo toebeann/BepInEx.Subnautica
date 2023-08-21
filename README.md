@@ -74,7 +74,7 @@ To install manually, follow these instructions:
     ```
 1. Run the game via Steam
 
-### Configuration (macOS)
+### Configuration (macOS - Steam only)
 
 1. Make the `run_bepinex.sh` executable by running this command in Terminal:
     ```
@@ -96,6 +96,12 @@ To install manually, follow these instructions:
 At this moment you will not see any clear indication that BepInEx is working. It is suggested to test by installing a simple plugin such as [Configuration Manager](https://www.nexusmods.com/subnautica/mods/1112) and then pressing F5 to open the Configuration Manager window.
 
 If you also wish to use QModManager, you will need to follow the [Installing QModManager on macOS](https://github.com/toebeann/BepInEx.Subnautica/wiki/Installing-QModManager-on-macOS) guide to get QModManager to work on macOS.
+
+### Configuration (macOS - other platforms)
+
+The best experience for modding Subnautica on macOS is via Steam. There is however a workaround which will let you run BepInEx plugins on macOS when you own the game on a non-Steam platform, e.g. Epic Games. Mods which require BepInEx patchers are not supported via this workaround.
+
+For details and instructions, see [Tobey's BepInEx 5 Hardpatcher](https://tobey.me/mods/bepinex/hardpatcher/).
 
 ## Useful links
 

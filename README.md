@@ -18,9 +18,9 @@ BepInEx is currently [one of the most popular modding tools for Unity on GitHub]
 This pack is preconfigured and ready to use for Subnautica modding.
 In particular, this pack comes with
 
-- [Tobey.Subnautica.ConfigHandler](https://github.com/toebeann/Tobey.Subnautica.ConfigHandler), a configurable BepInEx patcher to automatically take care of BepInEx configuration for QModManager compatibility,
-- [Tobey.UnityAudio](https://github.com/toebeann/Tobey.UnityAudio), a configurable BepInEx patcher to automatically add Unity audio support when mods need it, and
-- [Tobey.FileTree](https://github.com/toebeann/Tobey.FileTree), a configurable BepInEx plugin which logs the game's file tree to aid in troubleshooting issues.
+-   [Tobey.Subnautica.ConfigHandler](https://github.com/toebeann/Tobey.Subnautica.ConfigHandler), a configurable BepInEx patcher to automatically take care of BepInEx configuration for QModManager compatibility,
+-   [Tobey.UnityAudio](https://github.com/toebeann/Tobey.UnityAudio), a configurable BepInEx patcher to automatically add Unity audio support when mods need it, and
+-   [Tobey.FileTree](https://github.com/toebeann/Tobey.FileTree), a configurable BepInEx plugin which logs the game's file tree to aid in troubleshooting issues.
 
 ## Compatibility with QModManager
 
@@ -52,7 +52,7 @@ This is because QModManager overwrites this pack's files with an old version of 
 
 If you do overwrite files when you install QModManager, you will need to reinstall this pack for some BepInEx plugins to work.
 
-***
+---
 
 To install manually, follow these instructions:
 
@@ -86,10 +86,10 @@ To install manually, follow these instructions:
     **Note**: Make sure to replace `<path to game folder>` with the path to the folder where Subnautica is installed!
 1. Run the game via Steam
 1. At this point, you may see a prompt warning you that `libdoorstop_x64.dylib` cannot be opened because the developer is unverified. In this case:
-   1. Open System Preferences
-   1. Go to Security & Privacy and select the General tab
-   1. Towards the bottom you should see a message saying that the program was blocked from opening. Click `Open Anyway` and confirm the prompt that pops up.
-   1. Run the game via Steam
+    1. Open System Preferences
+    1. Go to Security & Privacy and select the General tab
+    1. Towards the bottom you should see a message saying that the program was blocked from opening. Click `Open Anyway` and confirm the prompt that pops up.
+    1. Run the game via Steam
 
 At this moment you will not see any clear indication that BepInEx is working. It is suggested to test by installing a simple plugin such as [Configuration Manager](https://www.nexusmods.com/subnautica/mods/1112) and then pressing F5 to open the Configuration Manager window.
 

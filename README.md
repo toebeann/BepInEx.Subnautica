@@ -34,10 +34,10 @@ The TL;DR is that QModManager is compatibile with BepInEx, [but there are some t
 
 1. Install [Vortex Mod Manager](https://www.nexusmods.com/about/vortex/) if you haven't already. Make sure it's fully up-to-date.
 1. Click the Vortex button at the top of [the Nexus Mods mod page](https://www.nexusmods.com/subnautica/mods/1108) to install.
-    - If you have QModManager installed, Vortex might notify you to reinstall/uninstall QModManager. Just do whatever it says.
 1. Check the 🔔 notifications area at the top right of Vortex:
-    1. If you see a notification saying "Elevation needed to deploy," click `Elevate` and authorize the elevation.
-    1. If you see any other notifications saying "Deployment needed" or similar, click `Deploy`.
+    - If you have QModManager installed, Vortex might notify you to reinstall/uninstall QModManager. Just do whatever it says.
+    - If you see a notification saying "Elevation needed to deploy," click `Elevate` and authorize the elevation.
+    - If you see any other notifications saying "Deployment needed" or similar, click `Deploy`.
 1. Run the game. If everything runs correctly, you will see the BepInEx console pop up on your desktop.
 
 ## Installation on macOS for idiots

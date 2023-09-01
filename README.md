@@ -100,10 +100,6 @@ For details and instructions, see [Tobey's BepInEx 5 Hardpatcher](https://tobey.
 
 ## Useful links
 
--   [Third-party site with a list of known compatible BepInEx plugins](https://ramuneneptune.github.io/modlists/sn.html)
-
-### Useful links for mod authors
-
 -   [BepInEx: writing basic plugin walkthrough](https://docs.bepinex.dev/articles/dev_guide/plugin_tutorial/)
 -   [BepInEx: useful plugins for modding](https://docs.bepinex.dev/articles/dev_guide/dev_tools.html)
 -   [BepInEx: patching game methods at runtime](https://docs.bepinex.dev/articles/dev_guide/runtime_patching.html)

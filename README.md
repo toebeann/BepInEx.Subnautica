@@ -110,4 +110,5 @@ For details and instructions, see [Tobey's BepInEx 5 Hardpatcher](https://tobey.
 
 If not, at this moment, you can use the following channels to ask for help
 
+-   [Subnautica Modding Community Discord](https://discord.gg/UpWuWwq)
 -   [BepInEx Discord](https://discord.gg/MpFEDAg) -- **Only technical support for THIS PACKAGE. No support for plugins.**

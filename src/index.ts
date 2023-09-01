@@ -44,9 +44,6 @@ const PAYLOAD_DIR = 'payload';
 const DIST_DIR = 'dist';
 const METADATA_FILE = '.metadata.json';
 const BepInExReleaseTypes = ['x86', 'x64', 'unix'] as const;
-const UNITY_VERSION = '2019.4.36';
-const includedCorlibs = ['netstandard.dll', 'System.Net.Http.dll', 'System.Runtime.Serialization.dll', 'System.Xml.Linq.dll'];
-const corlibsFilter = (corlib: string) => includedCorlibs.includes(corlib);
 
 type BepInExReleaseType = typeof BepInExReleaseTypes[number];
 type Release = Awaited<ReturnType<typeof octokit.rest.repos.getRelease>>['data'];
@@ -166,43 +163,12 @@ const downloadAsset = async (asset: Asset, type: BepInExReleaseType) => {
     return response.data;
 }
 
-const downloadCorlibs = async (unityVersion: string) => {
-    console.log(`Downloading core librariess for Unity version: ${unityVersion}...`);
-
-    try {
-        const response = await fetch(`https://unity.bepinex.dev/corlibs/${unityVersion}.zip`);
-
-        if (!response.ok) {
-            console.error(`Could not retrieve corlibs for Unity version: ${unityVersion}`, response.status, response.statusText, response.url);
-            return;
-        }
-
-        return response.arrayBuffer();
-    } catch (error) {
-        console.error(`Could not retrieve corlibs for Unity version: ${unityVersion}`, error);
-    }
-}
-
 const embedPayload = async (archive: JSZip) => {
     console.log('Embedding payload in archive...');
 
     for (const path of (await getFileNames(PAYLOAD_DIR)).sort()) {
         const relativePath = relative(PAYLOAD_DIR, path);
         archive.file(relativePath, await fs.readFile(path));
-    }
-
-    return archive;
-}
-
-const embedCorlibs = async (archive: JSZip, buffer: ArrayBuffer) => {
-    console.log('Embedding corlibs in archive...');
-
-    const corlibs = await JSZip.loadAsync(buffer);
-    for (const path of Object.keys(corlibs.files).filter(corlibsFilter)) {
-        archive.file(
-            join('corlibs', path),
-            await corlibs.file(path)!.async('uint8array'),
-        );
     }
 
     return archive;
@@ -296,9 +262,6 @@ if (metadata.version
 }
 
 // we have a new (or unknown) release, let's handle it
-const corlibsBuffer = await downloadCorlibs(UNITY_VERSION);
-if (!corlibsBuffer) exit(1);
-
 const archives = await Promise.all([
     getAssetArchive(latestBepInExRelease, "x64"),
     getAssetArchive(latestBepInExRelease, "unix"),
@@ -321,7 +284,6 @@ if (archives.every(result => !result.success)) {
 
 const merged = await mergeArchives(...archives.map((result) => result.archive!));
 await Promise.all([
-    embedCorlibs(merged, corlibsBuffer),
     embedPayload(merged),
     fs.ensureDir(DIST_DIR),
 ]);

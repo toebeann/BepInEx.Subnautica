@@ -19,13 +19,8 @@ This pack is preconfigured and ready to use for Subnautica modding.
 In particular, this pack comes with
 
 - [Tobey.Subnautica.ConfigHandler](https://github.com/toebeann/Tobey.Subnautica.ConfigHandler), a configurable BepInEx patcher to automatically take care of BepInEx configuration for QModManager compatibility,
-- [Tobey.UnityAudio](https://github.com/toebeann/Tobey.UnityAudio), a configurable BepInEx patcher to automatically add Unity audio support when mods need it,
-- [Tobey.FileTree](https://github.com/toebeann/Tobey.FileTree), a configurable BepInEx plugin which logs the game's file tree to aide in troubleshooting issues, and
-- the following core assemblies for Unity v2019.4.36 which are missing on the `legacy` branch, for consistency when modding:
-  - `netstandard.dll`,
-  - `System.Net.Http.dll`,
-  - `System.Runtime.Serialization.dll`, and
-  - `System.Xml.Linq.dll`
+- [Tobey.UnityAudio](https://github.com/toebeann/Tobey.UnityAudio), a configurable BepInEx patcher to automatically add Unity audio support when mods need it, and
+- [Tobey.FileTree](https://github.com/toebeann/Tobey.FileTree), a configurable BepInEx plugin which logs the game's file tree to aid in troubleshooting issues.
 
 ## Compatibility with QModManager
 

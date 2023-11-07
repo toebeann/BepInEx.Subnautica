@@ -119,8 +119,8 @@ executable_type=$(LD_PRELOAD="" file -b "${executable_path}");
 case $executable_type in
     *PE32*)
         echo "The executable is a Windows executable file. You must use Wine/Proton and BepInEx for Windows with this executable."
-        echo "Uninstall BepInEx for *nix and install BepInEx for Windows instead."
-        echo "More info: https://github.com/toebeann/BepInEx.Subnautica#configuration-linuxsteamdeck"
+        echo "Configure Steam to launch the game with WINEDLLOVERRIDES as instructed in the README of Tobey's BepInEx Pack for Subnautica."
+        echo "More info: https://github.com/toebeann/BepInEx.Subnautica#configuration-on-linux-steamos-etc"
         exit 1
         ;;
     *64-bit*)

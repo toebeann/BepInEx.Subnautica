@@ -42,7 +42,7 @@ The TL;DR is that QModManager is compatibile with BepInEx, [but there are some t
 
 ## Installation on macOS for idiots
 
-[Click here for an idiot's guide to macOS installation.](https://github.com/toebeann/BepInEx.Subnautica/wiki/Idiot's-guide-to-macOS-installation)
+[Click here for an idiot's guide to macOS installation](https://github.com/toebeann/BepInEx.Subnautica/wiki/Idiot's-guide-to-macOS-installation).
 
 ## Installation (manual)
 

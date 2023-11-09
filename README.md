@@ -72,34 +72,9 @@ To install manually, follow these instructions:
     ```
 1. Run the game via Steam
 
-### Configuration on macOS (Steam only)
+### Configuration on macOS
 
-1. Make the `run_bepinex.sh` executable by running this command in Terminal:
-    ```
-    chmod u+x "<path to game folder>/run_bepinex.sh"
-    ```
-    **Note**: Make sure to replace `<path to game folder>` with the path to the folder where Subnautica is installed!
-1. In Steam, go to the game's properties and set the launch arguments to:
-    ```
-    "<path to game folder>/run_bepinex.sh" %command%
-    ```
-    **Note**: Make sure to replace `<path to game folder>` with the path to the folder where Subnautica is installed!
-1. Run the game via Steam
-1. At this point, you may see a prompt warning you that `libdoorstop_x64.dylib` cannot be opened because the developer is unverified. In this case:
-    1. Open System Preferences
-    1. Go to Security & Privacy and select the General tab
-    1. Towards the bottom you should see a message saying that the program was blocked from opening. Click `Open Anyway` and confirm the prompt that pops up.
-    1. Run the game via Steam
-
-At this moment you will not see any clear indication that BepInEx is working. It is suggested to test by installing a simple plugin such as [Configuration Manager](https://www.nexusmods.com/subnautica/mods/1112) and then pressing F5 to open the Configuration Manager window.
-
-If you also wish to use QModManager, you will need to follow the [Installing QModManager on macOS](https://github.com/toebeann/BepInEx.Subnautica/wiki/Installing-QModManager-on-macOS) guide to get QModManager to work on macOS.
-
-### Configuration on macOS (other platforms e.g. Epic Games)
-
-The best experience for modding Subnautica on macOS is via Steam. There is however a workaround which will let you run BepInEx plugins on macOS when you own the game on a non-Steam platform, e.g. Epic Games. Mods which require BepInEx patchers are not supported via this workaround, including QModManager.
-
-For details and instructions, see [Tobey's BepInEx 5 Hardpatcher](https://tobey.me/mods/bepinex/hardpatcher/).
+[Follow the idiot's guide to macOS installation](https://github.com/toebeann/BepInEx.Subnautica/wiki/Idiot's-guide-to-macOS-installation).
 
 ## Useful links
 

@@ -56,7 +56,7 @@ If you do overwrite files when you install QModManager, you will need to reinsta
 
 To install manually, follow these instructions:
 
-1. [Download Tobey's BepInEx Pack for Subnautica](https://github.com/toebeann/BepInEx.Subnautica/releases/latest/download/BepInEx.zip)
+1. [Download Tobey's BepInEx Pack for Subnautica](https://github.com/toebeann/BepInEx.Subnautica/releases/latest/download/BepInEx.zip).
 1. Extract the contents of the downloaded archive into the game folder:
     - On Windows and Linux (SteamOS etc.), the game folder is the folder containing the game executable `Subnautica.exe`
     - On macOS, the game folder is the folder containing the game executable `Subnautica.app`

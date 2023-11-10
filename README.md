@@ -84,7 +84,7 @@ To install manually, follow these instructions:
 
 ## Issues, questions, etc.
 
-[First, check the FAQ to see if there is an answer to your question/issue.](https://github.com/toebeann/BepInEx.Subnautica/wiki/FAQ)
+[First, check the FAQ to see if there is an answer to your question/issue](https://github.com/toebeann/BepInEx.Subnautica/wiki/FAQ).
 
 If not, at this moment, you can use the following channels to ask for help
 

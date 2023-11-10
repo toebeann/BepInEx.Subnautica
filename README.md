@@ -28,7 +28,7 @@ The TL;DR is that QModManager is compatibile with BepInEx, [but there are some t
 
 ## General FAQ
 
-[There is an FAQ in the wiki.](https://github.com/toebeann/BepInEx.Subnautica/wiki/FAQ)
+[There is an FAQ in the wiki](https://github.com/toebeann/BepInEx.Subnautica/wiki/FAQ).
 
 ## Installation (automatic, Windows only)
 

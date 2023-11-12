@@ -50,10 +50,8 @@ The TL;DR is that QModManager is compatibile with BepInEx, [but there are some t
 
 1. [Download Tobey's BepInEx Pack for Subnautica](https://github.com/toebeann/BepInEx.Subnautica/releases/latest/download/BepInEx.zip). Make sure to unzip it in your Downloads folder if your browser doesn't do this automatically.
 1. Open Terminal with Launchpad (`⌘ Space`, type `terminal`)
-1. Copy the following and paste it in terminal with `⌘V`, and press `Enter` to run it.
-   ```sh
-   curl -fsSL https://cdn.jsdelivr.net/gh/toebeann/gib/bootstrap.sh | sh && PATH="$HOME/.deno/bin:$PATH" && deno run --allow-env --allow-run=deno,pbcopy,/bin/sh --allow-read --allow-sys=uid --allow-write --reload=https://cdn.jsdelivr.net/gh/toebeann/gib/mod.ts https://cdn.jsdelivr.net/gh/toebeann/gib/mod.ts
-   ```
+1. Copy the command from the [gib README](https://github.com/toebeann/gib#README) and paste it into the Terminal with `⌘V`, and press `Enter` to run it.
+
 If you get stuck, refer to the [gib README](https://github.com/toebeann/gib#README) for help.
 
 ## Manual Installation

@@ -50,9 +50,9 @@ The TL;DR is that QModManager is compatibile with BepInEx, [but there are some t
 
 1. [Download Tobey's BepInEx Pack for Subnautica](https://github.com/toebeann/BepInEx.Subnautica/releases/latest/download/BepInEx.zip). Make sure to unzip it in your Downloads folder if your browser doesn't do this automatically.
 1. Open Terminal with Launchpad (`⌘ Space`, type `terminal`)
-1. Copy the command from the [gib README](https://github.com/toebeann/gib#README) and paste it into the Terminal with `⌘V`, and press `Enter` to run it.
+1. Copy the command from the [gib README](https://github.com/toebeann/gib#readme) and paste it into the Terminal with `⌘V`, and press `Enter` to run it.
 
-If you get stuck, refer to the [gib README](https://github.com/toebeann/gib#README) for help.
+If you get stuck, refer to the [gib README](https://github.com/toebeann/gib#readme) for help.
 
 ## Manual Installation
 

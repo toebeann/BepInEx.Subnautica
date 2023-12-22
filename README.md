@@ -28,9 +28,13 @@ The TL;DR is that QModManager is compatibile with BepInEx, [but there are some t
 
 ## General FAQ
 
-[There is an FAQ in the wiki.](https://github.com/toebeann/BepInEx.Subnautica/wiki/FAQ)
+[There is an FAQ in the wiki](https://github.com/toebeann/BepInEx.Subnautica/wiki/FAQ).
 
-## Installation (automatic, Windows only)
+## Easy Automated Installation
+
+### Windows (Vortex)
+
+[Vortex](https://www.nexusmods.com/about/vortex/) is a tool for installing and managing mods on Windows. It can install all kinds of mods for Subnautica and other games, including this pack.
 
 1. Install [Vortex Mod Manager](https://www.nexusmods.com/about/vortex/) if you haven't already. Make sure it's fully up-to-date.
 1. Click the Vortex button at the top of [the Nexus Mods mod page](https://www.nexusmods.com/subnautica/mods/1108) to install.
@@ -40,23 +44,35 @@ The TL;DR is that QModManager is compatibile with BepInEx, [but there are some t
     - If you see any other notifications saying "Deployment needed" or similar, click `Deploy`.
 1. Run the game. If everything runs correctly, you will see the BepInEx console pop up on your desktop.
 
-## Installation on macOS for idiots
+### macOS (gib)
 
-[Click here for an idiot's guide to macOS installation.](https://github.com/toebeann/BepInEx.Subnautica/wiki/Idiot's-guide-to-macOS-installation)
+[gib](https://github.com/toebeann/gib) is a command-line tool which automates installation of BepInEx on macOS, as installing it manually is quite cumbersome and error-prone. gib makes it easy.
 
-## Installation (manual)
+1. [Download Tobey's BepInEx Pack for Subnautica](https://github.com/toebeann/BepInEx.Subnautica/releases/latest/download/BepInEx.zip). Make sure to unzip it in your Downloads folder if your browser doesn't do this automatically.
+1. Open Terminal with Launchpad (`⌘ Space`, type `terminal`).
+1. Copy the command from the [gib README](https://github.com/toebeann/gib#readme) and paste it into the Terminal with `⌘ V`, and press `Enter` to run it.
 
-**IMPORTANT NOTE**: If you later install QModManager, please make sure to choose **NOT** to overwrite any files when you do.
+If you get stuck, refer to the [gib README](https://github.com/toebeann/gib#readme) for help.
+
+## Manual Installation
+
+**ℹ️** macOS users should follow [the idiot's guide to macOS installation](https://github.com/toebeann/BepInEx.Subnautica/wiki/Idiot's-guide-to-macOS-installation).
+
+***
+
+**⚠️ IMPORTANT NOTE ⚠️**
+
+If you later install QModManager, please make sure to choose **NOT** to overwrite any files when you do.
 
 This is because QModManager overwrites this pack's files with an old version of BepInEx, and many BepInEx plugins require the latest version. QModManager is compatible with this pack's version of BepInEx.
 
 If you do overwrite files when you install QModManager, you will need to reinstall this pack for some BepInEx plugins to work.
 
----
+***
 
 To install manually, follow these instructions:
 
-1. [Download Tobey's BepInEx Pack for Subnautica](https://github.com/toebeann/BepInEx.Subnautica/releases/latest/download/BepInEx.zip)
+1. [Download Tobey's BepInEx Pack for Subnautica](https://github.com/toebeann/BepInEx.Subnautica/releases/latest/download/BepInEx.zip).
 1. Extract the contents of the downloaded archive into the game folder:
     - On Windows and Linux (SteamOS etc.), the game folder is the folder containing the game executable `Subnautica.exe`
     - On macOS, the game folder is the folder containing the game executable `Subnautica.app`
@@ -72,34 +88,9 @@ To install manually, follow these instructions:
     ```
 1. Run the game via Steam
 
-### Configuration on macOS (Steam only)
+### Configuration on macOS
 
-1. Make the `run_bepinex.sh` executable by running this command in Terminal:
-    ```
-    chmod u+x "<path to game folder>/run_bepinex.sh"
-    ```
-    **Note**: Make sure to replace `<path to game folder>` with the path to the folder where Subnautica is installed!
-1. In Steam, go to the game's properties and set the launch arguments to:
-    ```
-    "<path to game folder>/run_bepinex.sh" %command%
-    ```
-    **Note**: Make sure to replace `<path to game folder>` with the path to the folder where Subnautica is installed!
-1. Run the game via Steam
-1. At this point, you may see a prompt warning you that `libdoorstop_x64.dylib` cannot be opened because the developer is unverified. In this case:
-    1. Open System Preferences
-    1. Go to Security & Privacy and select the General tab
-    1. Towards the bottom you should see a message saying that the program was blocked from opening. Click `Open Anyway` and confirm the prompt that pops up.
-    1. Run the game via Steam
-
-At this moment you will not see any clear indication that BepInEx is working. It is suggested to test by installing a simple plugin such as [Configuration Manager](https://www.nexusmods.com/subnautica/mods/1112) and then pressing F5 to open the Configuration Manager window.
-
-If you also wish to use QModManager, you will need to follow the [Installing QModManager on macOS](https://github.com/toebeann/BepInEx.Subnautica/wiki/Installing-QModManager-on-macOS) guide to get QModManager to work on macOS.
-
-### Configuration on macOS (other platforms e.g. Epic Games)
-
-The best experience for modding Subnautica on macOS is via Steam. There is however a workaround which will let you run BepInEx plugins on macOS when you own the game on a non-Steam platform, e.g. Epic Games. Mods which require BepInEx patchers are not supported via this workaround, including QModManager.
-
-For details and instructions, see [Tobey's BepInEx 5 Hardpatcher](https://tobey.me/mods/bepinex/hardpatcher/).
+[Follow the idiot's guide to macOS installation](https://github.com/toebeann/BepInEx.Subnautica/wiki/Idiot's-guide-to-macOS-installation).
 
 ## Useful links
 
@@ -109,7 +100,7 @@ For details and instructions, see [Tobey's BepInEx 5 Hardpatcher](https://tobey.
 
 ## Issues, questions, etc.
 
-[First, check the FAQ to see if there is an answer to your question/issue.](https://github.com/toebeann/BepInEx.Subnautica/wiki/FAQ)
+[First, check the FAQ to see if there is an answer to your question/issue](https://github.com/toebeann/BepInEx.Subnautica/wiki/FAQ).
 
 If not, at this moment, you can use the following channels to ask for help
 

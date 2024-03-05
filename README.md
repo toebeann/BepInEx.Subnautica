@@ -19,7 +19,8 @@ This pack is preconfigured and ready to use for Subnautica modding.
 In particular, this pack comes with
 
 -   [Tobey.Subnautica.ConfigHandler](https://github.com/toebeann/Tobey.Subnautica.ConfigHandler), a configurable BepInEx patcher to automatically take care of BepInEx configuration for QModManager compatibility,
--   [Tobey.UnityAudio](https://github.com/toebeann/Tobey.UnityAudio), a configurable BepInEx patcher to automatically add Unity audio support when mods need it, and
+-   [Tobey.UnityAudio](https://github.com/toebeann/Tobey.UnityAudio), a configurable BepInEx patcher to automatically add Unity audio support when mods need it,
+-   [Tobey.PluginDoctor](https://github.com/toebeann/Tobey.PluginDoctor), a BepInEx plugin & patcher combo which diagnoses and reports advice on how to handle common problems with BepInEx 5 plugins, and
 -   [Tobey.FileTree](https://github.com/toebeann/Tobey.FileTree), a configurable BepInEx plugin which logs the game's file tree to aid in troubleshooting issues.
 
 ## Compatibility with QModManager

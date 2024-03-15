@@ -277,7 +277,7 @@ if (failed.length > 0) {
     exit(1);
 }
 
-if (archives.every(result => !result.success)) {
+if (failed.length === archives.length) {
     console.error(`No valid assets were found in repo /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`);
     exit(1);
 }

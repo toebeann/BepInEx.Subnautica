@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import { env, exit } from 'node:process';
-import { basename, dirname, join, relative, resolve } from 'node:path';
+import { basename, join, relative, resolve } from 'node:path';
 import dotenv from 'dotenv';
 import { simpleGit } from 'simple-git';
 import { getInput } from '@actions/core';

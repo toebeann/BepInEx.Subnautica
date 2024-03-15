@@ -155,7 +155,7 @@ const downloadAsset = async (asset: Asset, type: BepInExReleaseType) => {
         return;
     }
 
-    if (!(response.data instanceof ArrayBuffer)) {
+    if (!(response?.data instanceof ArrayBuffer)) {
         console.error(`Invalid data for ${type} asset: ${typeof response.data}`);
         return;
     }

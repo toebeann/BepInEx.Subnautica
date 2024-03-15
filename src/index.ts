@@ -293,7 +293,7 @@ if (env.MODE === 'dev') {
     exit(0);
 }
 
-// at this point all assets have been successfully downloaded and saved to disk with embedded payloads
+// at this point all assets have been successfully downloaded and saved to disk with our payload embedded
 await writeMetadataToDisk(metadata); // update metadata
 
 const git = simpleGit();

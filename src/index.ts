@@ -312,7 +312,7 @@ await git.addConfig('user.email', gitConfigEmail);
 await git.addConfig('core.ignorecase', 'false');
 
 console.log('Committing metadata...');
-await git.add('.metadata.json');
+await git.add(metadataPath);
 const commit = await git.commit('Updating metadata', [metadataPath]);
 await git.push();
 

@@ -321,7 +321,7 @@ const mergeArchives = async (...archives: JSZip[]) => {
 };
 
 if (import.meta.main) {
-  if (!Deno.env.get("GITHUB_PERSONAL_ACCESS_TOKEN")) {
+  if (!Deno.env.get("GITHUB_PERSONAL_ACCESS_TOKEN") && Deno.env.get("CI")) {
     console.error("GitHub PAT not set.");
     Deno.exit(1);
   }

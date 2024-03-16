@@ -3,6 +3,7 @@ import { ensureDir } from "https://deno.land/std@0.219.1/fs/mod.ts";
 import {
   basename,
   dirname,
+  join,
   relative,
   resolve,
 } from "https://deno.land/std@0.219.1/path/mod.ts";
@@ -28,15 +29,29 @@ import {
 import { z } from "npm:zod@^3.22.4";
 import payloadJson from "./payload.json" with { type: "json" };
 
-const REPO: Repo = { owner: "toebeann", repo: "bepinex.subnautica" };
-const BEPINEX_REPO: Repo = { owner: "BepInEx", repo: "BepInEx" };
+const repoSchema = z.object({
+  owner: z.string(),
+  name: z.string().optional(),
+  repo: z.string(),
+  repository: z.string().optional(),
+})
+  .transform((obj) => ({ ...obj, repo: obj.name ?? obj.repo }));
+type Repo = z.infer<typeof repoSchema>;
+
+const unitySchema = z.object({
+  version: z.string(),
+  corlibs: z.string().array().optional(),
+  libraries: z.string().array().optional(),
+});
+
+const REPO = repoSchema.parse(gh(payloadJson.repo));
+const BEPINEX_REPO = repoSchema.parse(gh(payloadJson.bepinex));
 const PAYLOAD_DIR = "payload";
 const DIST_DIR = "dist";
-const DIST_NAME = "Tobey's BepInEx Pack for Subnautica.zip";
 const METADATA_FILE = ".metadata.json";
-const BEPINEX_RELEASE_TYPES = ["x86", "x64", "unix"];
-
-type Repo = { owner: string; repo: string };
+const BEPINEX_RELEASE_TYPES = ["x86", "x64", "unix"] as const;
+const UNITY = "unity" in payloadJson &&
+  Object.freeze(unitySchema.parse(payloadJson.unity));
 
 type BepInExReleaseType = typeof BEPINEX_RELEASE_TYPES[number];
 type Release = Awaited<
@@ -56,7 +71,6 @@ const httpErrorSchema = z.object({
   status: z.number(),
   message: z.string(),
 }).passthrough();
-type HttpError = z.infer<typeof httpErrorSchema>;
 
 const bepinexAssetFilter = (
   asset: Asset,
@@ -188,6 +202,26 @@ const downloadAsset = async (
   return response.data;
 };
 
+const downloadData = async (url: string) => {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      console.error(
+        `Could not retrieve asset from URL: ${url}`,
+        response.status,
+        response.statusText,
+        response.url,
+      );
+      return;
+    }
+
+    return response.arrayBuffer();
+  } catch (error) {
+    console.error(`Could not retrieve asset from URL: ${url}`, error);
+  }
+};
+
 const embedPayload = async (archive: JSZip) => {
   console.log("Embedding payload in archive...");
 
@@ -197,6 +231,25 @@ const embedPayload = async (archive: JSZip) => {
     archive.file(relative(PAYLOAD_DIR, path), await Deno.readFile(path));
   }
 
+  return archive;
+};
+
+const embedData = async (
+  archive: JSZip,
+  buffer: ArrayBuffer,
+  predicate?: (filename: string) => boolean,
+) => {
+  const dataArchive = await JSZip.loadAsync(buffer);
+  for (
+    const path of predicate
+      ? Object.keys(dataArchive.files).filter(predicate)
+      : Object.keys(dataArchive.files)
+  ) {
+    archive.file(
+      join("corlibs", path),
+      await dataArchive.file(path)!.async("uint8array"),
+    );
+  }
   return archive;
 };
 
@@ -236,17 +289,13 @@ const getPayloadArchive = async (
   predicate: (asset: Asset) => boolean,
   octokit: Octokit = new Octokit(),
 ) => {
-  const repo = gh(release.html_url);
   const asset = release.assets.find(predicate);
-  if (!repo?.owner || !repo?.name || !asset) {
-    return { asset, repo, success: false };
-  }
+  const parsed = repoSchema.safeParse(gh(release.html_url));
+  if (!asset || !parsed.success) return { asset, repo: parsed, success: false };
+  const repo = parsed.data;
 
   try {
-    const assetBuffer = await downloadAsset(asset, {
-      owner: repo.owner,
-      repo: repo.name,
-    }, octokit);
+    const assetBuffer = await downloadAsset(asset, repo, octokit);
     if (!assetBuffer) return { asset, repo, success: false };
 
     return {
@@ -315,18 +364,13 @@ if (import.meta.main) {
 
   const latestPayloadReleases: Release[] = [];
   for await (const source of payloadJson.sources) {
-    const repo = gh(source);
+    let repo: Repo | undefined;
     try {
-      if (!repo?.owner || !repo?.name) {
-        throw source;
-      }
+      repo = repoSchema.parse(gh(source));
 
       try {
         latestPayloadReleases.push(
-          (await octokit.rest.repos.getLatestRelease({
-            owner: repo.owner,
-            repo: repo.name,
-          })).data,
+          (await octokit.rest.repos.getLatestRelease(repo)).data,
         );
       } catch (e) {
         const parsed = httpErrorSchema.safeParse(e);
@@ -334,10 +378,7 @@ if (import.meta.main) {
           // stable release wasn't found, let's also try prereleases
 
           const release = maxBy(
-            (await octokit.rest.repos.listReleases({
-              owner: repo.owner,
-              repo: repo.name,
-            })).data,
+            (await octokit.rest.repos.listReleases(repo)).data,
             (r) => new Date(r.created_at).valueOf(),
           );
 
@@ -393,9 +434,10 @@ if (import.meta.main) {
 
     if (
       !updatedSources.every((source) => {
-        const parsed = gh(source);
-        return parsed?.owner === BEPINEX_REPO.owner &&
-          parsed?.name === BEPINEX_REPO.repo;
+        const parsed = repoSchema.safeParse(gh(source));
+        return parsed.success &&
+          parsed.data.owner === BEPINEX_REPO.owner &&
+          parsed.data.repo === BEPINEX_REPO.repo;
       }) &&
       payloadJson.version === metadata.payload
     ) {
@@ -469,10 +511,56 @@ if (import.meta.main) {
   );
   await Promise.all([
     embedPayload(merged),
+    UNITY && UNITY.corlibs
+      ? (async () => {
+        console.log(
+          `Downloading corlibs for Unity version: ${UNITY.version}...`,
+        );
+
+        const corlibs = await downloadData(
+          `https://unity.bepinex.dev/corlibs/${UNITY.version}.zip`,
+        );
+
+        if (!corlibs) {
+          throw `Failed to download corlibs for Unity version: ${UNITY.version}`;
+        }
+
+        console.log(`Embedding corlibs: ${UNITY.version}...`);
+        return embedData(
+          merged,
+          corlibs,
+          UNITY.corlibs!.length === 0
+            ? undefined
+            : (filename) => UNITY.corlibs!.includes(filename),
+        );
+      })()
+      : Promise.resolve(),
+    UNITY && UNITY.libraries
+      ? (async () => {
+        console.log(
+          `Downloading Unity libraries for version: ${UNITY.version}...`,
+        );
+        const libraries = await downloadData(
+          `https://unity.bepinex.dev/libraries/${UNITY.version}.zip`,
+        );
+
+        if (!libraries) {
+          throw `Failed to download Unity libraries for version: ${UNITY.version}`;
+        }
+        console.log(`Embedding Unity libraries: ${UNITY.version}...`);
+        return embedData(
+          merged,
+          libraries,
+          UNITY.libraries!.length === 0
+            ? undefined
+            : (filename) => UNITY.libraries!.includes(filename),
+        );
+      })
+      : Promise.resolve(),
     ensureDir(DIST_DIR),
   ]);
   await writeArchiveToDisk(
-    resolve(DIST_DIR, DIST_NAME),
+    resolve(DIST_DIR, `${payloadJson.name}.zip`),
     merged,
   );
 

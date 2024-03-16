@@ -48,7 +48,7 @@ The TL;DR is that QModManager is compatibile with BepInEx, [but there are some t
 
 [gib](https://github.com/toebeann/gib) is a command-line tool which automates installation of BepInEx on macOS, as installing it manually is quite cumbersome and error-prone. gib makes it easy.
 
-1. [Download Tobey's BepInEx Pack for Subnautica](https://github.com/toebeann/BepInEx.Subnautica/releases/latest/download/BepInEx.zip). Make sure to unzip it in your Downloads folder if your browser doesn't do this automatically.
+1. [Download Tobey's BepInEx Pack for Subnautica](https://github.com/toebeann/BepInEx.Subnautica/releases/latest/download/Tobey.s.BepInEx.Pack.for.Subnautica.zip). Make sure to unzip it in your Downloads folder if your browser doesn't do this automatically.
 1. Open Terminal with Launchpad (`⌘ Space`, type `terminal`).
 1. Copy the command from [the Usage section of the gib README](https://github.com/toebeann/gib#usage) and paste it into the Terminal with `⌘ V`, and press `Enter` to run it.
 

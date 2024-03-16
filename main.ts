@@ -626,7 +626,11 @@ ${
 
 ## [Release notes](${release.html_url})
 
-${release.body ?? "No release notes provided."}
+${
+            release.body?.split("\n").map((s) => `> ${s.trimEnd()}`).join(
+              "\n",
+            ) ?? "No release notes provided."
+          }
 
 </details>`;
         }).join("\n\n")

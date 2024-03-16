@@ -523,7 +523,7 @@ if (import.meta.main) {
       tag_name: `v${version}`,
       target_commitish: commit.commit,
       name: `v${version}`,
-      body: `## Release notes
+      body: `# Payload auto-update
 
 ${
         (updatedSources ?? []).map((source) => {
@@ -534,9 +534,9 @@ ${
           if (!release || !parsed?.owner || !parsed?.name) return "";
 
           return `<details>
-<summary>${parsed.owner}/${parsed.name}</summary>
+<summary>Update ${parsed.repository} to ${release.tag_name}</summary>
 
-${release.name ?? ""} ${release.tag_name} [Link](${release.html_url})
+## [Release notes](${release.html_url})
 
 ${release.body ?? "No release notes provided."}
 

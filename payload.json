@@ -1,5 +1,9 @@
 {
   "version": "2.1.1",
   "sources": [
+    "toebeann/Tobey.FileTree",
+    "toebeann/Tobey.PluginDoctor",
+    "toebeann/Tobey.Subnautica.ConfigHandler",
+    "toebeann/Tobey.UnityAudio"
   ]
 }

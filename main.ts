@@ -44,16 +44,21 @@ const unitySchema = z.object({
   libraries: z.string().array().optional(),
 });
 
+const platformSchema = z.literal("x86").or(z.literal("x64")).or(
+  z.literal("unix"),
+);
+type Platform = z.infer<typeof platformSchema>;
+const platformsSchema = z.array(platformSchema);
+
 const REPO = repoSchema.parse(gh(payloadJson.repo));
 const BEPINEX_REPO = repoSchema.parse(gh(payloadJson.bepinex));
 const PAYLOAD_DIR = "payload";
 const DIST_DIR = "dist";
 const METADATA_FILE = ".metadata.json";
-const BEPINEX_RELEASE_TYPES = ["x86", "x64", "unix"] as const;
+const BEPINEX_PLATFORMS = platformsSchema.parse(payloadJson.platforms);
 const UNITY = "unity" in payloadJson &&
   Object.freeze(unitySchema.parse(payloadJson.unity));
 
-type BepInExReleaseType = typeof BEPINEX_RELEASE_TYPES[number];
 type Release = Awaited<
   ReturnType<InstanceType<typeof Octokit>["rest"]["repos"]["getRelease"]>
 >["data"];
@@ -74,15 +79,15 @@ const httpErrorSchema = z.object({
 
 const bepinexAssetFilter = (
   asset: Asset,
-  type: BepInExReleaseType,
+  platform: Platform,
   unityMono?: boolean,
 ) =>
-  asset.name.toLowerCase().includes(type.toLowerCase()) &&
+  asset.name.toLowerCase().includes(platform.toLowerCase()) &&
   (!unityMono || asset.name.toLowerCase().includes("unitymono"));
 
-const getBepInExAsset = (release: Release, type: BepInExReleaseType) =>
-  release.assets.find((asset) => bepinexAssetFilter(asset, type, true)) ??
-    release.assets.find((asset) => bepinexAssetFilter(asset, type));
+const getBepInExAsset = (release: Release, platform: Platform) =>
+  release.assets.find((asset) => bepinexAssetFilter(asset, platform, true)) ??
+    release.assets.find((asset) => bepinexAssetFilter(asset, platform));
 
 const getVersion = (version: string) => {
   const cleaned = clean(version, true);
@@ -262,25 +267,25 @@ const writeArchiveToDisk = (path: string, archive: JSZip) => {
 
 const getBepInExArchive = async (
   release: Release,
-  type: BepInExReleaseType,
+  platform: Platform,
   octokit: Octokit = new Octokit(),
 ) => {
   let asset: ReturnType<typeof getBepInExAsset>;
   try {
-    asset = getBepInExAsset(release, type);
-    if (!asset) return { asset, type, success: false };
+    asset = getBepInExAsset(release, platform);
+    if (!asset) return { asset, platform, success: false };
 
     const assetBuffer = await downloadAsset(asset, BEPINEX_REPO, octokit);
-    if (!assetBuffer) return { asset, type, success: false };
+    if (!assetBuffer) return { asset, platform, success: false };
 
     return {
       asset,
-      type,
+      platform,
       success: true,
       archive: await JSZip.loadAsync(assetBuffer),
     };
   } catch {
-    return { asset, type, success: false };
+    return { asset, platform, success: false };
   }
 };
 
@@ -475,7 +480,9 @@ if (import.meta.main) {
 
   // we have a new release, let's handle it
   const archives = await Promise.all([
-    getBepInExArchive(latestBepInExRelease, "x64", octokit),
+    ...BEPINEX_PLATFORMS.map((platform) =>
+      getBepInExArchive(latestBepInExRelease, platform, octokit)
+    ),
     ...latestPayloadReleases.map((release) =>
       getPayloadArchive(
         release,

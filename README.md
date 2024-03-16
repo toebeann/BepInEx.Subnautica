@@ -57,7 +57,8 @@ If you get stuck, refer to the [gib README](https://github.com/toebeann/gib#read
 ## Manual Installation
 
 > [!WARNING]\
-> It is _strongly_ recommended that macOS users [install with gib](#macos-gib), as manual installation on macOS is _extremely_ tedious and error prone!\
+> It is _strongly_ recommended that macOS users [install with gib](#macos-gib), as manual installation on macOS is _extremely_ tedious and error prone!
+> 
 > If you are a glutton for punishment and are determined to install manually, follow [the idiot's guide to macOS installation](https://github.com/toebeann/BepInEx.Subnautica/wiki/Idiot's-guide-to-macOS-installation).
 
 > [!CAUTION]\

@@ -289,7 +289,7 @@ if (import.meta.main) {
     }@users.noreply.github.com`;
 
   const octokit = new Octokit({
-    // auth: Deno.env.get("GITHUB_PERSONAL_ACCESS_TOKEN"),
+    auth: Deno.env.get("GITHUB_PERSONAL_ACCESS_TOKEN"),
   });
 
   console.log("Getting latest release...");

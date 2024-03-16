@@ -61,13 +61,6 @@ If you get stuck, refer to the [gib README](https://github.com/toebeann/gib#read
 > 
 > If you are a glutton for punishment and are determined to install manually, follow [the idiot's guide to macOS installation](https://github.com/toebeann/BepInEx.Subnautica/wiki/Idiot's-guide-to-macOS-installation).
 
-> [!CAUTION]\
-> If you later install QModManager, please make sure to choose **NOT** to overwrite any files when you do.
-> 
-> This is because QModManager overwrites this pack's files with an old version of BepInEx, and many BepInEx plugins require the latest version. QModManager is compatible with this pack's version of BepInEx.
-> 
-> If you do overwrite files when you install QModManager, you will need to reinstall this pack for some BepInEx plugins to work.
-
 > [!TIP]\
 > The game folder is the folder containing the game's executable (e.g. `Subnautica.exe`).
 > 

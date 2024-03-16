@@ -178,3 +178,19 @@ If not, at this moment, you can use the following channels to ask for help
 -   [Nexus Mods posts tab](https://www.nexusmods.com/subnautica/mods/1108/?tab=posts)
 -   [GitHub issues](https://github.com/toebeann/BepInEx.Subnautica/issues)
 -   [BepInEx Discord](https://discord.gg/MpFEDAg) -- **Intended for developers, only technical support for BepInEx itself will be provided. No support for mods.**
+
+## Licensing
+
+This GitHub repository contains no code or binaries from external sources, only code used to automatically put together a preconfigured .zip of the BepInEx pack.
+
+However, the .zip create by this repository's code contains binaries from the following projects, redistributed without modification and in accordance with their licenses:
+
+| Project                                                                                      | License(s)                                                                               |
+| -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| [BepInEx](https://github.com/BepInEx/BepInEx)                                                | [LGPL-2.1](https://github.com/BepInEx/BepInEx/blob/master/LICENSE)                       |
+| [Tobey.Subnautica.ConfigHandler](https://github.com/toebeann/Tobey.Subnautica.ConfigHandler) | [LGPL-3.0](https://github.com/toebeann/Tobey.Subnautica.ConfigHandler/blob/main/LICENSE) |
+| [Tobey.UnityAudio](https://github.com/toebeann/Tobey.UnityAudio)                             | [LGPL-3.0](https://github.com/toebeann/Tobey.UnityAudio/blob/main/LICENSE)               |
+| [Tobey.PluginDoctor](https://github.com/toebeann/Tobey.PluginDoctor)                         | [LGPL-3.0](https://github.com/toebeann/Tobey.PluginDoctor/blob/main/LICENSE)             |
+| [Tobey.FileTree](https://github.com/toebeann/Tobey.FileTree)                                 | [LGPL-3.0](https://github.com/toebeann/Tobey.FileTree/blob/main/LICENSE)                 |
+
+The code in this repository is licensed under the [LGPL-3.0 license](https://github.com/toebeann/BepInEx.Subnautica/blob/main/LICENSE).

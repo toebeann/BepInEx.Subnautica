@@ -28,6 +28,7 @@ In particular, this pack comes with
 The TL;DR is that QModManager is compatibile with BepInEx, [but there are some things to bear in mind](https://github.com/toebeann/BepInEx.Subnautica/wiki/Compatibility-with-QModManager).
 
 > [!CAUTION]
+> 
 > **Do not** install QModManager unless you are on the legacy branch, otherwise it **will** cause issues.
 
 ## Easy Automated Installation
@@ -56,12 +57,14 @@ If you get stuck, refer to the [gib README](https://github.com/toebeann/gib#read
 
 ## Manual Installation
 
-> [!WARNING]\
+> [!WARNING]
+> 
 > It is _strongly_ recommended that macOS users [install with gib](#macos-gib), as manual installation on macOS is _extremely_ tedious and error prone!
 > 
 > If you are a glutton for punishment and are determined to install manually, follow [the idiot's guide to macOS installation](https://github.com/toebeann/BepInEx.Subnautica/wiki/Idiot's-guide-to-macOS-installation).
 
-> [!TIP]\
+> [!TIP]
+> 
 > The game folder is the folder containing the game's executable (e.g. `Subnautica.exe`).
 > 
 > Steam users can find the game folder by right-clicking the game in their Steam library and selecting `Manage` -> `Browse local files`.
@@ -75,8 +78,10 @@ To install manually, follow these instructions:
     - Windows users: Run the game. If everything runs correctly, you will see the BepInEx console pop up on your desktop.
     - Linux (SteamOS etc.) & macOS users: Follow the configuration instructions for your operating system below:
 
-> [!IMPORTANT]\
-> **With just this pack installed, you will not see any changes in-game!**\
+> [!IMPORTANT]
+> 
+> **With just this pack installed, you will not see any changes in-game!**
+> 
 > Check the `LogOutput.log` file in the `BepInEx` folder to determine whether BepInEx has loaded.
 
 ### Configuration on Linux (SteamOS etc.)
@@ -94,12 +99,14 @@ To install manually, follow these instructions:
 
 ## Installing mods
 
-> [!NOTE]\
+> [!NOTE]
+> 
 > The paths in this section are relative to the game folder, i.e. `BepInEx/plugins` = `[game folder]/BepInEx/plugins`, where `[game folder]` is the path to the folder containing the game's executable (e.g. `Subnautica.exe`).
 > 
 > Steam users can find the game folder by right-clicking the game in their Steam library and selecting `Manage` -> `Browse local files`.
 
-> [!TIP]\
+> [!TIP]
+> 
 > "Extract the .zip" simply means take the contents of the .zip file and put them in the specified location.
 > 
 > For example, if you are told to "extract the .zip" or "extract the contents of the archive" into `BepInEx/plugins`, then you can simply open the .zip archive by double-clicking on it, then just select everything inside and drag the contents into your `BepInEx/plugins` folder. Easy!
@@ -119,7 +126,8 @@ However, sometimes mod authors don't give good (or any) instructions, or you jus
 | BepInEx patcher | `BepInEx/patchers`        |
 | QMod            | `QMods`                   |
 
-> [!IMPORTANT]\
+> [!IMPORTANT]
+> 
 > QModManager and QMods are _only_ for use on the legacy branch! See [Compatibility with QModManager](https://github.com/toebeann/BepInEx.Subnautica/wiki/Compatibility-with-QModManager) for details.
 
 ### Mod installation by .zip structure
@@ -132,12 +140,14 @@ However, sometimes mod authors don't give good (or any) instructions, or you jus
 | `Some Mod Name`                | Try `BepInEx/plugins` first, otherwise `QMods` |
 | `QMods`                        | Directly in the game folder                    |
 
-> [!IMPORTANT]\
+> [!IMPORTANT]
+> 
 > QModManager and QMods are _only_ for use on the legacy branch! See [Compatibility with QModManager](https://github.com/toebeann/BepInEx.Subnautica/wiki/Compatibility-with-QModManager) for details.
 
 ### Mod installation by requirements
 
-> [!TIP]\
+> [!TIP]
+> 
 > On Nexus mod pages, you can usually see a mod's requirements by expanding the `Requirements` near the top of the description tab. Otherwise, read the mod's description.
 
 | Listed in requirements or mentioned somewhere on the page | Where to extract the .zip                                                                                                                               |
@@ -147,7 +157,8 @@ However, sometimes mod authors don't give good (or any) instructions, or you jus
 | QModManager                                               | `QMods`                                                                                                                                                 |
 | SMLHelper                                                 | Try `BepInEx/plugins` first, otherwise `QMods`                                                                                                          |
 
-> [!IMPORTANT]\
+> [!IMPORTANT]
+> 
 > QModManager and QMods are _only_ for use on the legacy branch! See [Compatibility with QModManager](https://github.com/toebeann/BepInEx.Subnautica/wiki/Compatibility-with-QModManager) for details.
 
 ### I still can't figure it out!

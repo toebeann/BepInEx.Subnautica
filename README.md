@@ -33,6 +33,12 @@ The TL;DR is that QModManager is compatibile with BepInEx, [but there are some t
 
 ## Easy Automated Installation
 
+> [!IMPORTANT]
+> 
+> **With just this pack installed, you will not see any changes in-game!**
+> 
+> Check the `LogOutput.log` file in the `BepInEx` folder to determine whether BepInEx has loaded.
+
 ### Windows (Vortex)
 
 [Vortex](https://www.nexusmods.com/about/vortex/) is a tool for installing and managing mods on Windows. It can install all kinds of mods for Subnautica and other games, including this pack.
@@ -43,7 +49,7 @@ The TL;DR is that QModManager is compatibile with BepInEx, [but there are some t
     - If you have QModManager installed, Vortex might notify you to reinstall/uninstall QModManager. Just do whatever it says.
     - If you see a notification saying "Elevation needed to deploy," click `Elevate` and authorize the elevation.
     - If you see any other notifications saying "Deployment needed" or similar, click `Deploy`.
-1. Run the game. If everything runs correctly, you will see the BepInEx console pop up on your desktop.
+1. Run the game.
 
 ### macOS (gib)
 
@@ -75,7 +81,7 @@ To install manually, follow these instructions:
 1. Extract the contents of the downloaded archive into the game folder.\
    **ℹ️** _That just means open the .zip file and drag the files and folders out into the game folder!_
 1. Depending on your operating system:
-    - Windows users: Run the game. If everything runs correctly, you will see the BepInEx console pop up on your desktop.
+    - Windows users: Run the game.
     - Linux (SteamOS etc.) & macOS users: Follow the configuration instructions for your operating system below:
 
 > [!IMPORTANT]

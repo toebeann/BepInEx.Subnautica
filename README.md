@@ -193,7 +193,7 @@ If not, at this moment, you can use the following channels to ask for help
 
 This GitHub repository contains no code or binaries from external sources, only code used to automatically put together a preconfigured .zip of the BepInEx pack.
 
-However, the .zip create by this repository's code contains binaries from the following projects, redistributed without modification and in accordance with their licenses:
+However, the .zip created by this repository's code contains binaries from the following projects, redistributed without modification and in accordance with their licenses:
 
 | Project                                                                                      | License(s)                                                                               |
 | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |

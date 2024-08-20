@@ -1,32 +1,18 @@
-import "https://deno.land/std@0.219.1/dotenv/load.ts";
-import { ensureDir } from "https://deno.land/std@0.219.1/fs/mod.ts";
-import {
-  basename,
-  dirname,
-  join,
-  relative,
-  resolve,
-} from "https://deno.land/std@0.219.1/path/mod.ts";
-import { getInput } from "npm:@actions/core@^1.10.1";
-import { context } from "npm:@actions/github@^5.1.0";
-import JSZip from "npm:jszip@^3.10.1";
-// @deno-types="npm:@types/lodash.maxby@^4"
-import maxBy from "npm:lodash.maxby@^4.6.0";
-import { Octokit } from "npm:octokit@^3.1.2";
-// @deno-types="npm:@types/parse-github-url@^1"
-import gh from "npm:parse-github-url@^1.0.2";
-import { simpleGit } from "npm:simple-git@^3.22.0";
-// @deno-types="npm:@types/semver@^7"
-import {
-  clean,
-  coerce,
-  inc,
-  parse,
-  Range,
-  satisfies,
-  valid,
-} from "npm:semver@^7.6.0";
-import { z } from "npm:zod@^3.22.4";
+import { readFile, writeFile } from "node:fs/promises";
+import { EOL } from "node:os";
+import { basename, dirname, join, relative, resolve } from "node:path";
+import { env, exit } from "node:process";
+import { Glob, inspect } from "bun";
+import { getInput } from "@actions/core";
+import { context } from "@actions/github";
+import { ensureDir } from "fs-extra";
+import JSZip from "jszip";
+import maxBy from "lodash.maxby";
+import { Octokit } from "octokit";
+import gh from "parse-github-url";
+import { simpleGit } from "simple-git";
+import { coerce, inc, parse, Range, satisfies } from "semver";
+import { z } from "zod";
 import payloadJson from "./payload.json" with { type: "json" };
 
 const repoSchema = z.object({
@@ -120,17 +106,18 @@ const createMetadata = (
   }) satisfies Metadata;
 
 async function* getFilePaths(dir: string): AsyncGenerator<string> {
-  for await (const entry of Deno.readDir(dir)) {
-    const path = resolve(dir, entry.name);
-    if (entry.isDirectory) {
-      yield* getFilePaths(path);
-    } else {
-      yield path;
-    }
+  const glob = new Glob("**/*");
+  for await (
+    const entry of glob.scan({
+      cwd: dir,
+      onlyFiles: true,
+    })
+  ) {
+    yield resolve(dir, entry);
   }
 }
 
-const handleReleaseError = (error: unknown, repo: Repo) => {
+const handleReleaseError = (error: unknown, { owner, repo }: Repo) => {
   // an error occured while attempting to get the latest release
   const parsed = httpErrorSchema.safeParse(error);
   if (parsed.success) {
@@ -138,33 +125,35 @@ const handleReleaseError = (error: unknown, repo: Repo) => {
       ? "No releases were found"
       : "Could not retrieve releases";
 
-    console.error(
-      `${message} for repo: /${repo.owner}/${repo.repo}`,
-      `${parsed.data.status} ${parsed.data.message}`,
-    );
+    return [
+      `${message} for repo: /${owner}/${repo}`,
+      parsed.data.status,
+      parsed.data.message,
+    ].join(" ");
   } else {
-    console.error(
-      `Could not retrieve releases for repo: /${repo.owner}/${repo.repo}`,
-      error,
-    );
+    return [
+      `Could not retrieve releases for repo: /${owner}/${repo}`,
+      inspect(error, { colors: true }),
+    ].join(EOL);
   }
 };
 
-const handleAssetError = (error: unknown, asset: Asset) => {
+const handleAssetError = (error: unknown, { name }: Asset) => {
   // an error occured while attempting to get the latest release
   const parsed = httpErrorSchema.safeParse(error);
   if (parsed.success) {
     const message = parsed.data.status === 404
-      ? `Asset ${asset.name} not found`
-      : `Could not retrieve asset ${asset.name}`;
+      ? `Asset ${name} not found`
+      : `Could not retrieve asset ${name}`;
 
     console.error(
       `${message} for repo: /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`,
-      `${parsed.data.status} ${parsed.data.message}`,
+      parsed.data.status,
+      parsed.data.message,
     );
   } else {
     console.error(
-      `Could not retrieve asset ${asset.name} for repo: /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`,
+      `Could not retrieve asset ${name} for repo: /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`,
       error,
     );
   }
@@ -234,7 +223,7 @@ const embedPayload = async (archive: JSZip) => {
   for (
     const path of ((await Array.fromAsync(getFilePaths(PAYLOAD_DIR))).sort())
   ) {
-    archive.file(relative(PAYLOAD_DIR, path), await Deno.readFile(path));
+    archive.file(relative(PAYLOAD_DIR, path), await readFile(path));
   }
 
   return archive;
@@ -263,7 +252,7 @@ const writeArchiveToDisk = (path: string, archive: JSZip) => {
   console.log(`Writing archive to disk: ${path}`);
   return archive.generateInternalStream({ type: "uint8array" })
     .accumulate()
-    .then((data) => Deno.writeFile(resolve(path), data));
+    .then((data) => writeFile(resolve(path), data));
 };
 
 const getBepInExArchive = async (
@@ -327,24 +316,25 @@ const mergeArchives = async (...archives: JSZip[]) => {
 };
 
 if (import.meta.main) {
-  if (!Deno.env.get("GITHUB_PERSONAL_ACCESS_TOKEN") && Deno.env.get("CI")) {
-    console.error("GitHub PAT not set.");
-    Deno.exit(1);
+  const { GITHUB_PERSONAL_ACCESS_TOKEN, CI, GITHUB_ACTOR } = env;
+
+  if (!GITHUB_PERSONAL_ACCESS_TOKEN && CI) {
+    throw ("GitHub PAT not set.");
   }
 
   const { pusher } = context.payload;
   const gitConfigName = (getInput("git-config-email") ||
     pusher?.name satisfies string | undefined) ??
-    Deno.env.get("GITHUB_ACTOR") ??
+    GITHUB_ACTOR ??
     "GitHub Workflow Update and Release";
   const gitConfigEmail = (getInput("git-config-email") ||
     pusher?.email satisfies string | undefined) ??
     `${
-      Deno.env.get("GITHUB_ACTOR") ?? "github-workflow-update-and-release"
+      GITHUB_ACTOR ?? "github-workflow-update-and-release"
     }@users.noreply.github.com`;
 
   const octokit = new Octokit({
-    auth: Deno.env.get("GITHUB_PERSONAL_ACCESS_TOKEN"),
+    auth: GITHUB_PERSONAL_ACCESS_TOKEN,
   });
 
   console.log("Getting latest release...");
@@ -352,7 +342,7 @@ if (import.meta.main) {
   try {
     latestRelease = (await octokit.rest.repos.getLatestRelease(REPO)).data;
   } catch (error) {
-    handleReleaseError(error, REPO);
+    throw handleReleaseError(error, REPO);
   }
 
   const latestReleaseVersion = latestRelease
@@ -364,8 +354,7 @@ if (import.meta.main) {
     latestBepInExRelease =
       (await octokit.rest.repos.getLatestRelease(BEPINEX_REPO)).data;
   } catch (error) {
-    handleReleaseError(error, BEPINEX_REPO);
-    Deno.exit(1);
+    throw handleReleaseError(error, BEPINEX_REPO);
   }
 
   const latestPayloadReleases: Release[] = [];
@@ -398,11 +387,10 @@ if (import.meta.main) {
         }
       }
     } catch (error) {
-      handleReleaseError(error, {
+      throw handleReleaseError(error, {
         owner: repo?.owner ?? JSON.stringify(repo?.owner),
         repo: repo?.name ?? JSON.stringify(repo?.name),
       });
-      Deno.exit(1);
     }
   }
 
@@ -454,9 +442,10 @@ if (import.meta.main) {
             inc(metadata.payload, "patch") ??
             payloadJson.version;
 
-      await Deno.writeTextFile(
+      await writeFile(
         "payload.json",
         JSON.stringify(payloadJson, null, 2),
+        "utf8",
       );
     }
   }
@@ -476,7 +465,7 @@ if (import.meta.main) {
   ) {
     // both bepinex and our payload have not released an update since last check, so we should cancel
     console.log("No updates since last check.");
-    Deno.exit();
+    exit();
   }
 
   // we have a new release, let's handle it
@@ -504,14 +493,11 @@ if (import.meta.main) {
     for (const failure of failed) {
       console.error(`Failed to get archive`, failure.asset);
     }
-    Deno.exit(1);
+    exit(1);
   }
 
   if (failed.length === archives.length) {
-    console.error(
-      `No valid assets were found in repo /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`,
-    );
-    Deno.exit(1);
+    throw `No valid assets were found in repo /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`;
   }
 
   const merged = await mergeArchives(
@@ -572,12 +558,10 @@ if (import.meta.main) {
     merged,
   );
 
-  if (!Deno.env.get("CI")) {
-    Deno.exit();
-  }
+  if (!CI) exit();
 
   // at this point all assets have been successfully downloaded and saved to disk with our payload embedded
-  await Deno.writeTextFile(METADATA_FILE, JSON.stringify(metadata));
+  await writeFile(METADATA_FILE, JSON.stringify(metadata), "utf8");
 
   const git = simpleGit();
   const status = await git.status();
@@ -587,14 +571,15 @@ if (import.meta.main) {
   );
 
   if (!metadataPath) {
-    console.error("Metadata unchanged!");
-    Deno.exit(1);
+    throw "Metadata unchanged!";
   }
+
+  const { GITHUB_WORKSPACE } = env;
 
   await Promise.all([
     git.addConfig(
       "safe.directory",
-      Deno.env.get("GITHUB_WORKSPACE") || "",
+      GITHUB_WORKSPACE || "",
       false,
       "global",
     ),
@@ -665,12 +650,15 @@ ${
           ...REPO,
           release_id: release.data.id,
           name: basename(asset),
-          data: (await Deno.readFile(asset)),
+          data: await readFile(asset),
         },
       );
     }
   } catch (error) {
-    console.error("Failed to create release", error);
-    Deno.exit(1);
+    throw [
+      "Failed to create release",
+      inspect(error, { colors: true }),
+    ]
+      .join(EOL);
   }
 }

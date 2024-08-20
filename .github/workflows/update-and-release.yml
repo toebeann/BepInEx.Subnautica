@@ -18,12 +18,12 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v4
 
-            - name: Setup deno @ v1
-              uses: denoland/setup-deno@v1
-              with:
-                  deno-version: v1.x
+            - name: Setup bun
+              uses: oven-sh/setup-bun@v2
+
+            - run: bun install
 
             - name: Update and release 🚀
-              run: deno task run
+              run: bun start
               env:
                   GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}

@@ -1,5 +1,0 @@
-{
-  "tasks": {
-    "run": "deno run --allow-run=git --allow-read --allow-write=.metadata.json,payload.json,dist --allow-env --allow-net=api.github.com,objects.githubusercontent.com,uploads.github.com main.ts"
-  }
-}

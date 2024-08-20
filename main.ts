@@ -426,12 +426,13 @@ if (import.meta.main) {
       updatedSources.map((source) => gh(source)?.repository),
     );
 
+    const { owner, repo } = BEPINEX_REPO;
     if (
       !updatedSources.every((source) => {
         const parsed = repoSchema.safeParse(gh(source));
         return parsed.success &&
-          parsed.data.owner === BEPINEX_REPO.owner &&
-          parsed.data.repo === BEPINEX_REPO.repo;
+          parsed.data.owner.toLowerCase() === owner.toLowerCase() &&
+          parsed.data.repo.toLowerCase() === repo.toLowerCase();
       }) &&
       payloadJson.version === metadata.payload
     ) {

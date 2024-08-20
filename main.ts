@@ -44,9 +44,13 @@ const unitySchema = z.object({
   libraries: z.string().array().optional(),
 });
 
-const platformSchema = z.literal("x86").or(z.literal("x64")).or(
-  z.literal("unix"),
-);
+const platformSchema = z.union([
+  z.literal("linux_x64"),
+  z.literal("linux_x86"),
+  z.literal("macos_x64"),
+  z.literal("win_x64"),
+  z.literal("win_x86"),
+]);
 type Platform = z.infer<typeof platformSchema>;
 const platformsSchema = z.array(platformSchema);
 

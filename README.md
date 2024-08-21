@@ -172,6 +172,7 @@ First, double check and follow the instructions on the mod page. If you still ca
 
 ## Useful links for mod authors
 
+-   [Doorstop: debugging Unity Mono games](https://github.com/NeighTools/UnityDoorstop#debugging-in-unitymono)
 -   [BepInEx: writing basic plugin walkthrough](https://docs.bepinex.dev/articles/dev_guide/plugin_tutorial/)
 -   [BepInEx: useful plugins for modding](https://docs.bepinex.dev/articles/dev_guide/dev_tools.html)
 -   [BepInEx: patching game methods at runtime](https://docs.bepinex.dev/articles/dev_guide/runtime_patching.html)
@@ -184,7 +185,6 @@ Second, check [the FAQ](https://github.com/toebeann/BepInEx.Subnautica/wiki/FAQ)
 
 If not, at this moment, you can use the following channels to ask for help
 
--   [Doorstop: debugging Unity Mono games](https://github.com/NeighTools/UnityDoorstop#debugging-in-unitymono)
 -   [Subnautica Modding Community Discord](https://discord.gg/UpWuWwq)
 -   [Nexus Mods posts tab](https://www.nexusmods.com/subnautica/mods/1108/?tab=posts)
 -   [GitHub issues](https://github.com/toebeann/BepInEx.Subnautica/issues)

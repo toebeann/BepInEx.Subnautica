@@ -8,7 +8,7 @@
     "start": "bun main.ts"
   },
   "devDependencies": {
-    "@total-typescript/ts-reset": "^0.5.1",
+    "@total-typescript/ts-reset": "^0.6.0",
     "@types/bun": "latest",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash.maxby": "^4.6.9",

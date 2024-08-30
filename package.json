@@ -24,7 +24,7 @@
     "fs-extra": "^11.2.0",
     "jszip": "^3.10.1",
     "lodash.maxby": "^4.6.0",
-    "octokit": "^3",
+    "octokit": "^4.0.0",
     "parse-github-url": "^1.0.3",
     "semver": "^7.6.3",
     "simple-git": "^3.25.0",

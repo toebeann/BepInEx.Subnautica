@@ -10,6 +10,7 @@
   "sources": [
     "toebeann/Tobey.FileTree",
     "toebeann/Tobey.Subnautica.ConfigHandler",
-    "toebeann/Tobey.UnityAudio"
+    "toebeann/Tobey.UnityAudio",
+    "toebeann/Tobey.BepInEx.Timestamp"
   ]
 }

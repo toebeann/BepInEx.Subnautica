@@ -1,7 +1,9 @@
+import { file, Glob, inspect, write } from "bun";
+
 import { EOL } from "node:os";
 import { basename, dirname, join, relative, resolve } from "node:path";
 import { env, exit } from "node:process";
-import { file, Glob, inspect, write } from "bun";
+
 import { getInput } from "@actions/core";
 import { context } from "@actions/github";
 import { ensureDir } from "fs-extra";
@@ -12,6 +14,7 @@ import gh from "parse-github-url";
 import { simpleGit } from "simple-git";
 import { coerce, inc, parse, Range, satisfies } from "semver";
 import { z } from "zod";
+
 import payloadJson from "./payload.json" with { type: "json" };
 
 const repoSchema = z.object({

@@ -436,7 +436,7 @@ if (import.meta.main) {
           parsed.data.owner.toLowerCase() === owner.toLowerCase() &&
           parsed.data.repo.toLowerCase() === repo.toLowerCase();
       }) &&
-      payloadJson.version === metadata.payload
+      payloadJson.version === oldMetadata.payload
     ) {
       // this is an automated update which includes a payload source update, so we should increment the patch version
       metadata.payload =

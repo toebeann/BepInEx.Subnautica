@@ -475,12 +475,17 @@ if (import.meta.main) {
     ...latestPayloadReleases.map((release) =>
       getPayloadArchive(
         release,
-        gh(release.html_url)?.repository?.toLowerCase() ===
-            "bepinex/bepinex.melonloader.loader"
-          ? (asset) =>
-            asset.name.toLowerCase().includes("bepinex5") ||
-            asset.name.toLowerCase().startsWith("bepinex.melonloader.loader")
-          : (asset) => asset.name === `${gh(release.html_url)?.name}.zip`,
+        (asset) => {
+          const name = asset.name.toLowerCase();
+
+          if (!name.endsWith(".zip")) return false;
+          if (name.includes("bepinex5")) return true;
+
+          const repo = gh(release.html_url);
+          if (!repo || !repo.name) return false;
+
+          return name.startsWith(repo.name.toLowerCase());
+        },
         octokit,
       )
     ),
@@ -490,7 +495,7 @@ if (import.meta.main) {
   const failed = archives.filter((archive) => !archive.success);
   if (failed.length > 0) {
     for (const failure of failed) {
-      console.error(`Failed to get archive`, failure.asset);
+      console.error(`Failed to get archive`, failure);
     }
     exit(1);
   }

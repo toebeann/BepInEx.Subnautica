@@ -12,7 +12,7 @@ import maxBy from "lodash.maxby";
 import { Octokit } from "octokit";
 import gh from "parse-github-url";
 import { simpleGit } from "simple-git";
-import { coerce, inc, parse, Range, satisfies } from "semver";
+import { coerce, inc, parse, prerelease, Range, satisfies } from "semver";
 import { z } from "zod";
 
 import payloadJson from "./payload.json" with { type: "json" };
@@ -449,7 +449,7 @@ if (import.meta.main) {
     }
   }
 
-  const version = `${metadata.bepinex}-payload.${
+  const version = `${metadata.bepinex}-pack.${
     parse(payloadJson.version, true)
   }`;
 
@@ -457,10 +457,11 @@ if (import.meta.main) {
   console.log(`New version: ${version}`);
 
   if (
-    satisfies(version, new Range(`<= ${latestReleaseVersion}`), {
+    latestReleaseVersion &&
+    (satisfies(version, new Range(`<= ${latestReleaseVersion}`), {
       loose: true,
       includePrerelease: true,
-    })
+    }) && prerelease(version)?.[0] == prerelease(latestReleaseVersion)?.[0])
   ) {
     // both bepinex and our payload have not released an update since last check, so we should cancel
     console.log("No updates since last check.");

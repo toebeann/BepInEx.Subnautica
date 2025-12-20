@@ -17,7 +17,7 @@ In particular, this pack comes with:
 >
 > **With just this pack installed, you will not see any changes in-game!**
 >
-> Check the `BepInEx` > `LogOutput.log` file to determine whether BepInEx has loaded.
+> Check the file `BepInEx` > `LogOutput.log` to determine whether BepInEx has loaded.
 
 ### Windows (Vortex)
 
@@ -50,7 +50,7 @@ If you get stuck, refer to the [gib README](https://github.com/toebeann/gib#read
 >
 > **The game folder is the folder containing the game's executable (e.g. `Subnautica.exe`).**
 >
-> Steam users can find the game folder by right-clicking the game in their Steam library and selecting `Manage` -> `Browse local files`.
+> Steam users can find the game folder by right-clicking the game in their Steam library and selecting `Manage` > `Browse local files`.
 
 ### Quick start
 
@@ -130,7 +130,7 @@ Otherwise, you can now install mods according to the [Installing mods](#installi
 >
 > **With just this pack installed, you will not see any changes in-game!**
 >
-> Check the `BepInEx` > `LogOutput.log` file to determine whether BepInEx has loaded.
+> Check the file `BepInEx` > `LogOutput.log` to determine whether BepInEx has loaded.
 
 ## Installing mods
 

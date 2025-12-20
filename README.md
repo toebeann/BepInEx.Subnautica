@@ -178,4 +178,4 @@ However, the .zip created by this repository's code contains binaries from the f
 | [Tobey.FileTree](https://github.com/toebeann/Tobey.FileTree)                   | [LGPL-3.0](https://github.com/toebeann/Tobey.FileTree/blob/main/LICENSE)          |
 | [Tobey.UnityAudio](https://github.com/toebeann/Tobey.UnityAudio)               | [LGPL-3.0](https://github.com/toebeann/Tobey.UnityAudio/blob/main/LICENSE)        |
 
-The code in this repository is licensed under the [LGPL-2.1 license](https://github.com/toebeann/BepInEx.Subnautica/blob/main/LICENSE).
+The code in this repository is licensed under the [ISC license](https://github.com/toebeann/BepInEx.Subnautica/blob/main/LICENSE).

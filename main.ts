@@ -1,8 +1,7 @@
-import { readFile, writeFile } from "node:fs/promises";
 import { EOL } from "node:os";
 import { basename, dirname, join, relative, resolve } from "node:path";
 import { env, exit } from "node:process";
-import { Glob, inspect } from "bun";
+import { file, Glob, inspect, write } from "bun";
 import { getInput } from "@actions/core";
 import { context } from "@actions/github";
 import { ensureDir } from "fs-extra";
@@ -223,7 +222,7 @@ const embedPayload = async (archive: JSZip) => {
   for (
     const path of ((await Array.fromAsync(getFilePaths(PAYLOAD_DIR))).sort())
   ) {
-    archive.file(relative(PAYLOAD_DIR, path), await readFile(path));
+    archive.file(relative(PAYLOAD_DIR, path), await file(path).arrayBuffer());
   }
 
   return archive;
@@ -252,7 +251,7 @@ const writeArchiveToDisk = (path: string, archive: JSZip) => {
   console.log(`Writing archive to disk: ${path}`);
   return archive.generateInternalStream({ type: "uint8array" })
     .accumulate()
-    .then((data) => writeFile(resolve(path), data));
+    .then((data) => write(resolve(path), data));
 };
 
 const getBepInExArchive = async (
@@ -443,11 +442,7 @@ if (import.meta.main) {
             inc(metadata.payload, "patch") ??
             payloadJson.version;
 
-      await writeFile(
-        "payload.json",
-        JSON.stringify(payloadJson, null, 2),
-        "utf8",
-      );
+      await write("payload.json", JSON.stringify(payloadJson, null, 2));
     }
   }
 
@@ -562,7 +557,7 @@ if (import.meta.main) {
   if (!CI) exit();
 
   // at this point all assets have been successfully downloaded and saved to disk with our payload embedded
-  await writeFile(METADATA_FILE, JSON.stringify(metadata), "utf8");
+  await write(METADATA_FILE, JSON.stringify(metadata));
 
   const git = simpleGit();
   const status = await git.status();
@@ -651,7 +646,7 @@ ${
           ...REPO,
           release_id: release.data.id,
           name: basename(asset),
-          data: await readFile(asset),
+          data: await file(asset).arrayBuffer(),
         },
       );
     }

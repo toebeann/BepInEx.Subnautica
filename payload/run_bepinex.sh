@@ -178,6 +178,12 @@ case "${file_out}" in
     *32-bit*)
         arch="x86"
     ;;
+    *PE32+*)
+        arch="x64"
+    ;;
+    *PE32*)
+        arch="x86"
+    ;;
     *)
         echo "The executable \"${executable_path}\" is not compiled for x86 or x64 (might be ARM?)"
         echo "If you think this is a mistake (or would like to encourage support for other architectures)"

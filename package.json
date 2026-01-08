@@ -3,7 +3,7 @@
   "module": "main.ts",
   "dependencies": {
     "@actions/core": "^2.0.1",
-    "@actions/github": "^6.0.1",
+    "@actions/github": "^7.0.0",
     "fs-extra": "^11.3.3",
     "jszip": "^3.10.1",
     "lodash.maxby": "^4.6.0",

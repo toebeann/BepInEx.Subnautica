@@ -16,14 +16,26 @@ In particular, this pack comes with:
 
 ### Windows (Vortex)
 
+> [!TIP]
+>
+> **If you are migrating from a manual installation, it is recommended to fully delete your manual install of BepInEx before installing it with Vortex.**
+>
+> You'll want to take notes of which mods you had installed so you can reinstall them with Vortex.
+
 [Vortex](https://www.nexusmods.com/about/vortex/) is a tool for installing and managing mods on Windows. It can install all kinds of mods for Subnautica and other games, including this pack.
 
-1. Install [Vortex Mod Manager](https://www.nexusmods.com/about/vortex/) if you haven't already. Make sure it's fully up-to-date.
-1. Click the Vortex button at the top of [the Nexus Mods mod page](https://www.nexusmods.com/subnautica/mods/1108) to install.
-1. Check the 🔔 notifications area at the top right of Vortex:
-    - If you see a notification saying "Elevation needed to deploy," click `Elevate` and authorize the elevation.
-    - If you see any other notifications saying "Deployment needed" or similar, click `Deploy`.
-1. Run the game.
+1. Install [Vortex](https://www.nexusmods.com/about/vortex/) if you haven't already. Make sure it's fully up-to-date.
+2. Install the [Subnautica Support](https://www.nexusmods.com/site/mods/202) Vortex extension with Vortex.
+
+    To do so, just click the `Vortex` button at the top its page, and allow your browser to open the link with Vortex. Inside of Vortex, the extension browser should open up with Subnautica Support selected. Just click `Install` near the top, then close the extension browser. Vortex will tell you in the 🔔 notification area at the top right that you need to restart Vortex after it has been installed, so when you get that notification, go ahead and restart it.
+
+3. Click the `Vortex` button at the top of [the Nexus Mods mod page](https://www.nexusmods.com/subnautica/mods/1108) to install the BepInEx pack with Vortex.
+
+With that done, you're all set and can run the game. You can now easily keep BepInEx up-to-date by selecting Subnautica from the `Games` tab in Vortex, then navigating to the `Mods` tab and clicking `Check for Updates` at the top. Vortex will notify you if updates are available, and there'll be a little yellow icon by its version. Click the icon to get the update.
+
+And likewise, you can use Vortex to install, manage and update other mods when browsing Subnautica mods on Nexus Mods by clicking the `Vortex` button on their pages. For more fine-grained control over which mod files you install, you can instead click the `Mod Manager Download` button from the `Files` tab of each mod.
+
+For mods downloaded from other websites, you can install those with Vortex, too! Just drag the .zip, .rar or .7z archive into the `Drop File(s)` section at the bottom of the `Mods` tab after selecting Subnautica from the `Games` tab, and Vortex will install it for you assuming it is a recognised mod type. Note that Vortex won't be able to check for updates on these mods, which will be indicated by a little yellow ⚠️ warning sign in the `Version` column of its row on the `Mods` tab. It doesn't mean the mod itself won't work, just that Vortex doesn't know the version numberof the mod and can't tell you if updates are available or not, so it will be up to you to check for udpates on that mod and download and install them.
 
 ### macOS (gib)
 

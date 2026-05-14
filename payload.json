@@ -5,7 +5,7 @@
   "bepinex": "bepinex/bepinex",
   "platforms": [
     "win_x64",
-    "macos_x64"
+    "macos_universal"
   ],
   "sources": [
     "toebeann/Tobey.FileTree",

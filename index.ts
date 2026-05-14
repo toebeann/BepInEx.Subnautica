@@ -35,7 +35,7 @@ const unitySchema = z.object({
 const platformSchema = z.union([
   z.literal("linux_x64"),
   z.literal("linux_x86"),
-  z.literal("macos_x64"),
+  z.literal("macos_universal"),
   z.literal("win_x64"),
   z.literal("win_x86"),
 ]);

@@ -305,11 +305,26 @@ const getPayloadArchive = async (
   }
 };
 
-const mergeArchives = async (...archives: JSZip[]) => {
+const mergePayloadArchives = async (bepinex: JSZip[], payload: JSZip[]) => {
   const merged = new JSZip();
 
-  for (const archive of archives) {
+  for (const archive of bepinex) {
     for (const [path, file] of Object.entries(archive.files)) {
+      merged.file(path, await file.async("uint8array"));
+    }
+  }
+
+  const rename = new Map(
+    Object.entries(payloadJson.rename || {})
+      .map(([search, replace]) => [new RegExp(search, "i"), replace]),
+  );
+
+  for (const archive of payload) {
+    for (let [path, file] of Object.entries(archive.files)) {
+      for (const [search, replace] of rename) {
+        path = path.replace(search, replace);
+      }
+
       merged.file(path, await file.async("uint8array"));
     }
   }
@@ -469,11 +484,13 @@ if (import.meta.main) {
   }
 
   // we have a new release, let's handle it
-  const archives = await Promise.all([
-    ...BEPINEX_PLATFORMS.map((platform) =>
-      getBepInExArchive(latestBepInExRelease, platform, octokit)
+  const [bepinex, payload] = await Promise.all([
+    Promise.all(
+      BEPINEX_PLATFORMS.map((platform) =>
+        getBepInExArchive(latestBepInExRelease, platform, octokit)
+      ),
     ),
-    ...latestPayloadReleases.map((release) =>
+    Promise.all(latestPayloadReleases.map((release) =>
       getPayloadArchive(
         release,
         (asset) => {
@@ -489,8 +506,10 @@ if (import.meta.main) {
         },
         octokit,
       )
-    ),
+    )),
   ]);
+
+  const archives = [...bepinex, ...payload];
 
   // check for failures
   const failed = archives.filter((archive) => !archive.success);
@@ -505,8 +524,9 @@ if (import.meta.main) {
     throw `No valid assets were found in repo /${BEPINEX_REPO.owner}/${BEPINEX_REPO.repo}`;
   }
 
-  const merged = await mergeArchives(
-    ...archives.map((result) => result.archive!),
+  const merged = await mergePayloadArchives(
+    bepinex.map((result) => result.archive!),
+    payload.map((result) => result.archive!),
   );
   await Promise.all([
     embedPayload(merged),

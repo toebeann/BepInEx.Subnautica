@@ -24,7 +24,7 @@
   "description": "Tobey's BepInEx Pack for Subnautica",
   "private": true,
   "scripts": {
-    "start": "bun main.ts"
+    "start": "bun index.ts"
   },
   "type": "module"
 }

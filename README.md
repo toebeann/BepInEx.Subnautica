@@ -6,18 +6,13 @@ This is a [BepInEx](https://github.com/BepInEx/BepInEx) pack for Subnautica, pre
 
 In particular, this pack comes with:
 
--   [Tobey's Unity Audio Patcher for BepInEx](https://github.com/toebeann/Tobey.UnityAudio), a configurable BepInEx patcher to automatically add Unity audio support when mods need it,
--   [Tobey's Game Info Logger for BepInEx](https://github.com/toebeann/Tobey.BepInEx.GameInfo), a simple BepInEx plugin to log information about the currently loaded Unity game,
--   [Tobey's File Tree Logger for BepInEx](https://github.com/toebeann/Tobey.FileTree), a configurable BepInEx plugin which logs the game's file tree to aid in troubleshooting issues, and
--   [Tobey's Timestamp Logger for BepInEx](https://github.com/toebeann/Tobey.BepInEx.Timestamp), a configurable BepInEx patcher which logs the current timestamp.
+- [BepInEx Loading Progress Splash Screen](https://github.com/BepInEx/BepInEx.SplashScreen), a BepInEx patcher that displays a loading screen on game startup,
+- [Tobey's Unity Audio Patcher for BepInEx](https://github.com/toebeann/Tobey.UnityAudio), a configurable BepInEx patcher to automatically add Unity audio support when mods need it,
+- [Tobey's Game Info Logger for BepInEx](https://github.com/toebeann/Tobey.BepInEx.GameInfo), a simple BepInEx plugin to log information about the currently loaded Unity game,
+- [Tobey's File Tree Logger for BepInEx](https://github.com/toebeann/Tobey.FileTree), a configurable BepInEx plugin which logs the game's file tree to aid in troubleshooting issues, and
+- [Tobey's Timestamp Logger for BepInEx](https://github.com/toebeann/Tobey.BepInEx.Timestamp), a configurable BepInEx patcher which logs the current timestamp.
 
 ## Easy Automated Installation
-
-> [!IMPORTANT]
->
-> **With just this pack installed, you will not see any changes in-game!**
->
-> Check the file `BepInEx` > `LogOutput.log` to determine whether BepInEx has loaded.
 
 ### Windows (Vortex)
 
@@ -56,7 +51,7 @@ If you get stuck, refer to the [gib README](https://github.com/toebeann/gib#read
 
 #### Windows
 
-Extract the .zip into the game folder replacing any files if prompted, run the game once to generate all needed files and folders, then quit the game at the main menu and you're good to go. Remember to check the [Installing mods](#installing-mods) section for info on how to install mods!
+Extract the .zip into the game folder replacing any files if prompted, run the game once to generate all needed files and folders, then quit the game at the main menu and assuming you saw the BepInEx loading screen you're good to go. Remember to check the [Installing mods](#installing-mods) section for info on how to install mods!
 
 If something doesn't go according to plan or you need further guidance, please refer to the [full instructions](#full-instructions-for-windows-linux-and-steam-deck-handhelds). Don't worry, it looks harder than it is. **Please don't skimread!**
 
@@ -89,7 +84,6 @@ If you are a glutton for punishment and are determined to install manually, foll
     If done correctly, inside your game folder it should look something like this (the entries in bold being from the pack):
 
     **⚠️ _This list is used as a reference and is non-exhaustive, there will be other stuff, please don't delete anything!_**
-
     - _**`BepInEx`**_
     - `Subnautica_Data`
     - _**`doorstop_config.ini`**_
@@ -118,19 +112,15 @@ If you are a glutton for punishment and are determined to install manually, foll
 
     Launching the game with Vortex should be fine too.
 
+    You'll know that BepInEx is working when a loading screen pops up. This screen will disappear once your mods have finished loading.
+
 6. Exit the game at the main menu.
 
 Assuming you have followed these instructions correctly, inside the `BepInEx` folder there will now be a file `LogOutput.log` (or simply `LogOutput` - it's the same thing). This is your log file, and it will be egenerated every time the game runs with technical and diagnostic information about your installed mods, and any errors that might happen while playing. It's very useful for troubleshooting, and it is recommended to share it whenever asking for help with your mods. It is equivalent to the BepInEx console window you might be familiar with, containing all of the same information.
 
-If this file is missing, it usually means that you have not installed the pack correctly and you should probably try again from scratch. Make sure to pay careful attention to the instructions and don't skimread any of the steps.
+If this file is missing or you didn't see the loading screen, it usually means that you have not installed the pack correctly and you should probably try again from scratch. Make sure to pay careful attention to the instructions and don't skimread any of the steps.
 
 Otherwise, you can now install mods according to the [Installing mods](#installing-mods) section below.
-
-> [!IMPORTANT]
->
-> **With just this pack installed, you will not see any changes in-game!**
->
-> Check the file `BepInEx` > `LogOutput.log` to determine whether BepInEx has loaded.
 
 ## Installing mods
 
@@ -152,17 +142,17 @@ Second, check [the FAQ](https://github.com/toebeann/BepInEx.Subnautica/wiki/FAQ)
 
 If not, you can use the following channels to ask for help:
 
--   [Subnautica Modding Community Discord](https://discord.gg/UpWuWwq)
--   [Nexus Mods posts tab](https://www.nexusmods.com/subnautica/mods/1108/?tab=posts)
--   [GitHub issues](https://github.com/toebeann/BepInEx.Subnautica/issues)
+- [Subnautica Modding Community Discord](https://discord.gg/UpWuWwq)
+- [Nexus Mods posts tab](https://www.nexusmods.com/subnautica/mods/1108/?tab=posts)
+- [GitHub issues](https://github.com/toebeann/BepInEx.Subnautica/issues)
 
 ## Useful links for mod authors
 
--   [Doorstop: debugging Unity Mono games](https://github.com/NeighTools/UnityDoorstop#debugging-in-unitymono)
--   [BepInEx: writing basic plugin walkthrough](https://docs.bepinex.dev/articles/dev_guide/plugin_tutorial/)
--   [BepInEx: useful plugins for modding](https://docs.bepinex.dev/articles/dev_guide/dev_tools.html)
--   [BepInEx: patching game methods at runtime](https://docs.bepinex.dev/articles/dev_guide/runtime_patching.html)
--   [Subnautica Modding Community Discord](https://discord.gg/UpWuWwq)
+- [Doorstop: debugging Unity Mono games](https://github.com/NeighTools/UnityDoorstop#debugging-in-unitymono)
+- [BepInEx: writing basic plugin walkthrough](https://docs.bepinex.dev/articles/dev_guide/plugin_tutorial/)
+- [BepInEx: useful plugins for modding](https://docs.bepinex.dev/articles/dev_guide/dev_tools.html)
+- [BepInEx: patching game methods at runtime](https://docs.bepinex.dev/articles/dev_guide/runtime_patching.html)
+- [Subnautica Modding Community Discord](https://discord.gg/UpWuWwq)
 
 ## Licensing
 
@@ -173,6 +163,7 @@ However, the .zip created by this repository's code contains binaries from the f
 | Project                                                                        | License(s)                                                                        |
 | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
 | [BepInEx](https://github.com/BepInEx/BepInEx)                                  | [MIT](https://github.com/BepInEx/BepInEx/blob/v5-lts/LICENSE)                     |
+| [BepInEx.SplashScreen](https://github.com/BepInEx/BepInEx.SplashScreen)        | [MIT](https://github.com/BepInEx/BepInEx.SplashScreen/blob/main/LICENSE)          |
 | [Tobey.BepInEx.GameInfo](https://github.com/toebeann/Tobey.BepInEx.GameInfo)   | [LGPL-3.0](https://github.com/toebeann/Tobey.BepInEx.GameInfo/blob/main/LICENSE)  |
 | [Tobey.BepInEx.Timestamp](https://github.com/toebeann/Tobey.BepInEx.Timestamp) | [LGPL-3.0](https://github.com/toebeann/Tobey.BepInEx.Timestamp/blob/main/LICENSE) |
 | [Tobey.FileTree](https://github.com/toebeann/Tobey.FileTree)                   | [LGPL-3.0](https://github.com/toebeann/Tobey.FileTree/blob/main/LICENSE)          |
